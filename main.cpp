@@ -8,7 +8,9 @@
 
 int main()
 {
-	Neuron n;
+	//on peut faire une fonction aléatoire pour décider qui est post et qui avant
+	
+	Neuron n;//, n2; //n2 is the post-synaptic neuron	
 	n.update(N);	
 	return 0;
 }
