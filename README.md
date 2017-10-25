@@ -13,10 +13,13 @@ Add an attribute (bool spike_) that tells if a spike occured during a time step 
 All the files made so far have been deplaced in a new branch: that was the one neuron program.
 
 The program has to evolve: it has to work for two neurons and one connection.
+New Branch: TwoNeurons
 In the main, a vector of pointer on Neuron has been added. For now, two neurons are on this vector.
 The second neuron is the post-synpatic neuron. New attribute in class Neruon: a vector of pointer on Neuron, which will store all the target neurons for a given neuron. New funciton: addTargetNeuron, which will add a new target to the vector. In the main, neuron 2 is added as a target for neuron 1 with this function.
 All the post-synaptic neuron will have a external input of 0.0, wheras all the other neurons will have an external input choosen by the user.
 New loop in the main: in this loop, all neurons that are part of the vector Neurons will be updated. All the neuron's clocks have to been incremented of one time step before the simulation time increases, so the simulation time will be updated only at the end of the loop and only if all the neurons have been updated. Add an assert function to check that all neurons are updated before incrementing the simulation time. 
+
+New branch: TwoNeuronsWithDelay.
 Add a new attribute: a time buffer array. The array will store the amplitude J recevied from a neuron that has spiked, and it stores that data with a certain a D. The size of the table is D+1, so that the amplitude will always be stored in the right case that take count of the delay. 
 New functon addTimeBuffer, that adds the amplitude in the correct place in the table. If another amplitude is already presents, the two will sum up. 
 Now, if the neuron spikes, the amplitude J has to been stored in the time buffer at place (neuron_clock_+D)%(D+1). The modulo allows to place the amplitude in the right case without having an "infinite" size. 
@@ -24,6 +27,7 @@ If a target is present, the post-synpatic neuron will updated. New function: upd
 Remember to always put the case of the time buffer at 0 every time the amplitude stored has been used. 
 When tested, the porgram works. The post-synpatic neurons receives the input with the correct delay.
 
+New branch: TwoNeuronsWithDelayAndTest
 I've created a Neuron_unittest to to do some tests on the program with gtest. To include gtest, I've modified the cmake file and recompile with the command cmake. The file is correctly included. 
 Add three tests about the membrane potential of one neuron:
 1) the external input is 1 when the neuron starts receiving the input (in a time step interval). The value after one step simulation with the external input received should coincide with the membrane equation (expect near, with an error of 0.001).
