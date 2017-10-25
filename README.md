@@ -11,3 +11,9 @@ Add a neuron clock for the start and the end (as time constants) of the time int
 All the files made so far have been deplaced in a new branch: that was the one neuron program.
 
 The program has to evolve: it has to work for two neurons and one connection.
+
+
+
+Add a new attribute: a time buffer array. The array will store the amplitude J recevied from a neuron that has spiked, and it stores that data with a certain a D.
+Problems: difficult to know how to fill the ring buffer, and how it has to work exactly. I've tried to use a vector (even if it's more expansive in terms of time). The vector is filled but I don't know how the post-synpatic neuron has to receive it. After trying the function receive with the time buffer vector and the time plus the delay (in step) as argument, the program doesn't work. 
+The time buffer returns array. No more changes added.
