@@ -27,12 +27,4 @@ If a target is present, the post-synpatic neuron will updated. New function: upd
 Remember to always put the case of the time buffer at 0 every time the amplitude stored has been used. 
 When tested, the porgram works. The post-synpatic neurons receives the input with the correct delay.
 
-New branch: TwoNeuronsWithDelayAndTest
-I've created a Neuron_unittest to to do some tests on the program with gtest. To include gtest, I've modified the cmake file and recompile with the command cmake. The file is correctly included. 
-Add three tests about the membrane potential of one neuron:
-1) the external input is 1 when the neuron starts receiving the input (in a time step interval). The value after one step simulation with the external input received should coincide with the membrane equation (expect near, with an error of 0.001).
-2) the externa input is now negatif (-1), and the membrane potential should be as befor but negatif (expect near, with a error of 0.001).
-3) the external input is 0 in the time step interval and the membrane potential is zero too (expect near 0, with an error of 0.001),
-The tests work, so I assume that the change in the membrane potential of one neurons works for every value.
-Add two more test on the membrane potential to be sure that is 0 even if an input is given when the neuron is outside the given time step interval. Both tests work.
-Add one test for the delay: when the neuron spikes, after a time D the post-synpatic neuron has to receive it. To test it I check the membrane potential, with should change of 0.1 (expect near, with an error of 0.001). After each update, I always check the membrane potential to be sure that it is as expect for both neuron spiking and neuron receiving. The test work. I add the files in a new branch (TwoNeuronsWithDelayAndTests). 
+
