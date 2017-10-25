@@ -12,7 +12,7 @@ Add a neuron clock for the start and the end (as time constants) of the time int
 Add an attribute (bool spike_) that tells if a spike occured during a time step or not. Nothing changed. 
 All the files made so far have been deplaced in a new branch: that was the one neuron program.
 
-The prpgram have to evolve: it has to work for two neurons and one connection.
+The program has to evolve: it has to work for two neurons and one connection.
 In the main, a vector of pointer on Neuron has been added. For now, two neurons are on this vector.
 The second neuron is the post-synpatic neuron. New attribute in class Neruon: a vector of pointer on Neuron, which will store all the target neurons for a given neuron. New funciton: addTargetNeuron, which will add a new target to the vector. In the main, neuron 2 is added as a target for neuron 1 with this function.
 All the post-synaptic neuron will have a external input of 0.0, wheras all the other neurons will have an external input choosen by the user.
