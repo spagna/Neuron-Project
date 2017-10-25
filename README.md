@@ -10,4 +10,4 @@ Change in the main.cpp. All the code relatif to the Datas.txt has been moved in 
 Add a neuron clock for the start and the end (as time constants) of the time interval where the neuron recevies an external input. Add a function that update the state of the neuron in case of spike (better modularisation). The program works, and the number of spikes and the time the spikes occured now match.
 All the files made so far have been deplaced in a new branch: that was the one neuron program.
 
-The prpgram have to evolve: it has to work for two neurons and one connection.
+The program has to evolve: it has to work for two neurons and one connection.
