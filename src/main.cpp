@@ -10,7 +10,7 @@ int main()
 	file.open("Datas.txt");
 	assert(not file.fail()); //check if the fail opens correctly
 	
-	Neuron n3;
+
 	Neuron n_excitatory;
 	n_excitatory.setExcitatoryNeuron(true);
 	Neuron n_inhibitory;
@@ -23,7 +23,6 @@ int main()
 			neurons[i] = new Neuron (n_inhibitory);
 		}
 	}
-	
 	for (auto n: neurons){
 		assert(n!=nullptr);
 	}
@@ -31,31 +30,38 @@ int main()
 	for (auto n : neurons){
 		n->addConnections(neurons);
 	}
+	int a(0);
+	for (auto n: neurons){
+		if (n->getExternalInput() != 0.0){
+			++a;
+		}
+	}
+	std::cout << a << std::endl;
+	return 0;
 	
-	/*for (size_t i(12490); i<12500; ++i){
-		std::cout << "This neurons  has " << neurons[i]->numberOfTargets() << " targets " << std::endl;
-		
-	}*/
 	std::cout << neurons[1]->numberOfTargets() << std::endl;
+	std::cout << neurons[1]->getExcitatoryConnections() << std::endl;
+	std::cout << neurons[1]->getInhibitoryConnections() << std::endl;
 	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	
-	double external_input (0.0); //allow the user to choose the external value from the terminal
+	/*double external_input (0.0); //allow the user to choose the external value from the terminal
 	std::cout << "Choose a value for the external input" << std::endl; 
 	std::cin >> external_input;
 	
+	
 	neurons[1]->setExternalInput(external_input); //a non post-synaptic neuron has a certain value as external input
 	//n2.setExternalInput(0.0); //if it's a post-synaptic neuron, the external potential is 0
+*/
 
-	int a(0);
 	do {
-		//for (auto n : neurons){ //update all the neurons present in the network
-			if(neurons[1]!=nullptr){
-				neurons[1]->update(N);
+		for (auto n : neurons){ //update all the neurons present in the network
+			if(n!=nullptr){
+				n->update(N);
 
 			} 
-		//}
-		++a;
+		}
+		
 		//std::cout << "AAAAAAAAAAAAAAAAA       " << a << std::endl;
 		simulation_time += N; //the simulation time advanced of a time step N
 		/*for (auto n : neurons){ //test that all neurons have updated and that all clocks are equal to the simulation clock

@@ -242,7 +242,7 @@ void Neuron::update(int dt)
 	if (r_period_ and tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
-		V_membrane_ = const1*V_membrane_ + input*const2; //solve the membrane equation
+		V_membrane_ = const1*V_membrane_ + /*input*const2*/ input; //solve the membrane equation
 		r_period_ = false; //the neuron is no more in its refractory period
 	}
 	neuron_clock_ += dt;	//the simulation advanced of a step dt
@@ -253,8 +253,8 @@ void Neuron::receive(double ampl)
 {
 	received_ = true;
 	t_received_spike_ = neuron_clock_*h;
-	V_membrane_ = const1*V_membrane_ + external_input_*const2 + ampl; //the membrane potential is calculated based on the new input from neuron 1
-	std::cout << "The spike is received at time " << t_received_spike_ << " and the membrane potential is " << V_membrane_ << std::endl;
+	V_membrane_ = const1*V_membrane_ + /*external_input_*const2 +*/ ampl; //the membrane potential is calculated based on the new input from neuron 1
+	//std::cout << "The spike is received at time " << t_received_spike_ << " and the membrane potential is " << V_membrane_ << std::endl;
 }
 
 void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
@@ -274,6 +274,11 @@ void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
 		++ nb_inhibitory_connections;//take the count of the inhibitory connections received by a neuron
 	}
 	
+	std::poisson_distribution<> dis_ext (v_ext);
+	for (int i(0); i<c_ext; ++i){
+		neurons[j]->setExternalInput(J_e);
+		++nb_excitatory_connections;
+	}
 	
 }
 			

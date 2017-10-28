@@ -99,7 +99,6 @@ public:
 	void receive (double ampl); //if the neuron is a post-synaptic neuron, and it receives an input from another neuron (at time time and with amplitude J), this function update its state
 	
 	void addConnections (std::array<Neuron*, 12500>  neurons); //add connections between all neurons of the network. 
-	void addExternalConnections (std::array<Neuron*, 12500> neurons); 
 	
 	~Neuron();
 	
