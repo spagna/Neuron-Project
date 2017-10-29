@@ -15,6 +15,7 @@ int main()
 	n_excitatory.setExcitatoryNeuron(true);
 	Neuron n_inhibitory;
 	n_inhibitory.setExcitatoryNeuron(false);
+	
 	std::array <Neuron*, 12500> neurons;
 	for (size_t i(0); i<neurons.size(); ++i){
 		if (i<1000){
@@ -28,16 +29,8 @@ int main()
 	}
 	
 	for (auto n : neurons){
-		n->addConnections(neurons);
+		n->addConnections(neurons);	
 	}
-	int a(0);
-	for (auto n: neurons){
-		if (n->getExternalInput() != 0.0){
-			++a;
-		}
-	}
-	std::cout << a << std::endl;
-	return 0;
 	
 	std::cout << neurons[1]->numberOfTargets() << std::endl;
 	std::cout << neurons[1]->getExcitatoryConnections() << std::endl;
@@ -50,20 +43,18 @@ int main()
 	std::cin >> external_input;
 	
 	
-	neurons[1]->setExternalInput(external_input); //a non post-synaptic neuron has a certain value as external input
-	//n2.setExternalInput(0.0); //if it's a post-synaptic neuron, the external potential is 0
-*/
+	n1.setExternalInput(external_input); //a non post-synaptic neuron has a certain value as external input
+	n2.setExternalInput(0.0); //if it's a post-synaptic neuron, the external potential is 0*/
+
 
 	do {
 		for (auto n : neurons){ //update all the neurons present in the network
 			if(n!=nullptr){
 				n->update(N);
-
 			} 
 		}
-		
-		//std::cout << "AAAAAAAAAAAAAAAAA       " << a << std::endl;
 		simulation_time += N; //the simulation time advanced of a time step N
+		std::cout << simulation_time << std::endl;
 		/*for (auto n : neurons){ //test that all neurons have updated and that all clocks are equal to the simulation clock
 			assert (n->getNeuronClock() == simulation_time);
 		}*/

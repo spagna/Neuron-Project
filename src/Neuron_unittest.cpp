@@ -100,13 +100,11 @@ TEST (NeuronTest, Delay){
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001);
 
 	for (int i(0); i<=D; ++i){
-		neuron1.update(1);
 		neuron2.update(1);
-		EXPECT_NEAR(neuron1.getV_membrane(), 0.0, 0.001);
 		}
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.1, 0.001);
 	neuron1.update(1);
-	//EXPECT_EQ (neuron2.getV_membrane(), 0.1-const1*neuron2.getV_membrane());
+	
 	
 }
 			

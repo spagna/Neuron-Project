@@ -96,9 +96,10 @@ public:
 	void updateNeuronState (int dt); //if the potential cross the threshold, this function update all the attributes of the neuron	
 	void updatePostSynapticNeuron(int dt); //update the state of a post-synpatic neuron at every time step
 	void update(int dt); //at every time step, the neuron controle if he received an input or not and updates 	
-	void receive (double ampl); //if the neuron is a post-synaptic neuron, and it receives an input from another neuron (at time time and with amplitude J), this function update its state
+	void receive (int time, double ampl); //if the neuron is a post-synaptic neuron, and it receives an input from another neuron (at time time and with amplitude J), this function update its state
 	
 	void addConnections (std::array<Neuron*, 12500>  neurons); //add connections between all neurons of the network. 
+	void randomSpikes (); //generates the random spikes arrived from outside the brain at every time step
 	
 	~Neuron();
 	
