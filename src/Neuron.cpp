@@ -3,13 +3,14 @@
 
 
 Neuron::Neuron (double V_membrane, unsigned int nb_spikes,
-				double t_spike,bool refractory, 
+				double t_spike, 
 				bool spike, int neuron_clock, 
 				double external_input,
 				bool excitatory_neuron)
-: V_membrane_ (V_membrane), nb_spikes_(nb_spikes), 
-  t_spike_(t_spike), r_period_(refractory), 
-  spike_(spike), neuron_clock_ (neuron_clock), 
+: V_membrane_ (V_membrane),
+  nb_spikes_(nb_spikes), 
+  t_spike_(t_spike), spike_(spike), 
+  neuron_clock_ (neuron_clock), 
   external_input_(external_input), 
   excitatory_neuron_ (excitatory_neuron)
 {
@@ -31,11 +32,6 @@ int Neuron::getNumberSpikes() const
 double Neuron::getTimeSpike() const
 {
 	return t_spike_;
-}
-
-bool Neuron::getRefractory() const
-{
-	return r_period_;
 }
 
 bool Neuron::getSpikeState() const
@@ -94,11 +90,6 @@ void Neuron::setTimeSpike (double t)
 	t_spike_ = t;
 }
 
-void Neuron::setRefractory (bool refractory)
-{
-	r_period_ = refractory;
-}
-
 void Neuron::setSpikeState (bool spike)
 {
 	spike_ = spike;
@@ -140,12 +131,6 @@ void Neuron::setInhibitoryConnections(int nb)
 	nb_inhibitory_connections = nb;
 }
 
-size_t Neuron::numberOfTargets() const
-{
-	return n_target_.size();
-}
-
-
 void Neuron::addTimeBuffer (int i, double val)
 {
 	t_buffer_[i] += val;
@@ -160,56 +145,49 @@ void Neuron::addTargetNeuron(Neuron* n)
 void Neuron::updateNeuronState (int dt)
 {
 	t_spike_ = dt*h;//store the time of the spike 
-	//std::cout << "The spike occurred at: " << t_spike_ << std::endl;
-	r_period_ = true; // the neuron enters in its refractory period
 	++nb_spikes_; //the number of spike increases of one
 	spike_ = true; //the spike has occured
+}
+
+void Neuron::updateTargets()
+{
+	for (auto n: n_target_){
+		assert(n != nullptr); //control that the case of the target vector aren't nullptr
+		if (excitatory_neuron_){
+			n->addTimeBuffer((neuron_clock_+D)%(D+1), J_e);// the time buffer is fulled with a certain J from an excitatory neuron at a certain time step delay
+		} else {
+			n->addTimeBuffer((neuron_clock_+D)%(D+1), -J_i);// the time buffer is fulled with a certain J from an inhibitory neuron at a certain time step delay
+		}
+	}
 }
 
 void Neuron::update(int dt)
 {
 	double input (0.0);
-
-	spike_ = false; //by default, we don't have any spike
-	double random_spikes(0);
 	
-	if (neuron_clock_ >= n_clock_start and neuron_clock_ <= n_clock_stop){	//outside the clock of the neuron, there is no input. When the clock of the neuron start, the received input changes value.
+	spike_ = false; //by default, we don't have any spike
+	double sum_amplitudes(0.0); //contains all the amplitude of the arriving spike of excitatory and inhibitory neurons and from the random spiking external neurons
+	sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + randomSpikes();
+	assert (randomSpikes() >= 0.0);
+	/*if (neuron_clock_ >= n_clock_start and neuron_clock_ <= n_clock_stop){	//outside the clock of the neuron, there is no input. When the clock of the neuron start, the received input changes value.
 		input = external_input_;
-		random_spikes = J_e*randomSpikes(); //generate random external spikes from the rest of the brain
+		sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + randomSpikes();
+		assert (randomSpikes() >= 0.0);
 	} else {
 		input = 0.0;
-	}
+	}*/
+	
 	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold
 		updateNeuronState(neuron_clock_);
+		updateTargets();
 	} 
-	if (spike_ and not n_target_.empty()) { //if there is a spike and the current neurons has some targets
-		for (auto n: n_target_){
-			assert(n != nullptr); //control that the case of the target vector aren't nullptr
-			if (excitatory_neuron_){
-				n->addTimeBuffer((neuron_clock_+D)%(D+1), J_e);// the time buffer is fulled with a certain J from an excitatory neuron at a certain time step delay
-			} else {
-				n->addTimeBuffer((neuron_clock_+D)%(D+1), -J_i);// the time buffer is fulled with a certain J from an inhibitory neuron at a certain time step delay
-			}
-		}
-	}
-	if (r_period_ and tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
+	if (tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
-		if (getTimeBuffer((neuron_clock_)%(D+1)) != 0.0){ // if there is an impulse in the ring buffer at this time step
-			receive(neuron_clock_, getTimeBuffer((neuron_clock_)%(D+1)) + random_spikes); // it means a neuron has spiked and the current neuron receives the spike after a certain time step delay
-		} else {
-			V_membrane_ = const1*V_membrane_ + input*const2 + random_spikes; //solve the membrane equation
-			r_period_ = false; //the neuron is no more in its refractory period
-		}
+		V_membrane_= const1*V_membrane_ + input*const2 + sum_amplitudes;
 	}
-
+	setTimeBuffer(neuron_clock_%(D+1), 0.0);
 	neuron_clock_ += dt;	//the simulation advanced of a step dt
-}
-
-void Neuron::receive(int time, double ampl)
-{
-	V_membrane_ = const1*V_membrane_ + external_input_*const2 + ampl; //the membrane potential is calculated based on the new input from neuron 1
-	setTimeBuffer(time%(D+1), 0.0); //the used case of the time buffer is reinitialized to 0 to allow further insertions
 }
 
 void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
@@ -230,12 +208,12 @@ void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
 	}
 }
 
-int Neuron::randomSpikes()
+double Neuron::randomSpikes()
 {
 	static std::random_device rd; //algorithme for generating random numbers
 	static std::mt19937 gen(rd()); //algorithme for generating random numbers
 	static std::poisson_distribution<> dis_ext (c_e*v_ext*h); //rate at which the target of the external connections receive spikes
-	return dis_ext(gen);
+	return J_e*dis_ext(gen);
 }
 			
 Neuron::~Neuron()
