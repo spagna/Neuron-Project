@@ -6,9 +6,12 @@
 int main()
 {
 	
-	std::ofstream file; //open a file to store the values of the membrane potentials
-	file.open("Datas.txt");
-	assert(not file.fail()); //check if the fail opens correctly
+	std::ofstream file1, file2; //open a file to store the values of the membrane potentials
+	file1.open("Datas.txt");
+	assert(not file1.fail()); //check if the fail opens correctly
+	file2.open("Spike_time.txt");
+	assert (not file2.fail());
+	
 	
 
 	Neuron n_excitatory;
@@ -16,9 +19,9 @@ int main()
 	Neuron n_inhibitory;
 	n_inhibitory.setExcitatoryNeuron(false);
 	
-	std::array <Neuron*, 12500> neurons;
+	std::array <Neuron*, total_neurons> neurons;
 	for (size_t i(0); i<neurons.size(); ++i){
-		if (i<10000){
+		if (i<excitatory_neurons){
 			neurons[i] = new Neuron(n_excitatory);
 		} else {
 			neurons[i] = new Neuron (n_inhibitory);
@@ -38,16 +41,16 @@ int main()
 
 	do {
 		
-		for (auto n : neurons){ //update all the neurons present in the network
-			assert (n != nullptr);
-			n->update(N);
+		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
+			assert (neurons[i] != nullptr);
+			neurons[i]->update(N);
+			if (neurons[i]->getSpikeState()){
+				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
+			}
 		}
 		simulation_time += N; //the simulation time advanced of a time step N
-		file << "Membrane potential at " << simulation_time*h << " milliseconds: " << neurons[0]->getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
+		file1 << "Membrane potential at " << simulation_time*h << " milliseconds: " << neurons[0]->getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
 	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation
-	/*for (size_t i(0); i<neurons.size(); ++i){
-		std::cout << "Neuron " << i+1 << " had " << neurons[i]->getNumberSpikes() << " spikes " << std::endl;
-	}*/
 	return 0;
 }
 

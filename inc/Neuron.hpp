@@ -103,9 +103,8 @@ private:
 	std::array <double, D+1> t_buffer_; //stock the value J every time that a spike occured but with a certain delay
 	std::vector <Neuron*> n_target_; //this vector contains all the post synaptic neurons (the targets for the current neuron)
 	bool excitatory_neuron_; //tell if a neuron is excitatory or inhibitory: true if exctitatory and false if inhibitory
-	int nb_excitatory_connections;
-	int nb_inhibitory_connections;
-	double amplitude_;
+	int nb_excitatory_connections_;
+	int nb_inhibitory_connections_;
 };
 
 #endif

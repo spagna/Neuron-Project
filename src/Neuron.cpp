@@ -66,12 +66,12 @@ bool Neuron::getExcitatoryNeuron() const
 
 int Neuron::getExcitatoryConnections() const
 {
-	return nb_excitatory_connections;
+	return nb_excitatory_connections_;
 }
 
 int Neuron::getInhibitoryConnections() const
 {
-	return nb_inhibitory_connections;
+	return nb_inhibitory_connections_;
 }
 
 void Neuron::setV_membrane(double V_membrane)
@@ -123,12 +123,12 @@ void Neuron::setExcitatoryNeuron (bool n)
 
 void Neuron::setExcitatoryConnections(int nb)
 {
-	nb_excitatory_connections = nb;
+	nb_excitatory_connections_ = nb;
 }
 
 void Neuron::setInhibitoryConnections(int nb)
 {
-	nb_inhibitory_connections = nb;
+	nb_inhibitory_connections_ = nb;
 }
 
 void Neuron::addTimeBuffer (int i, double val)
@@ -162,20 +162,11 @@ void Neuron::updateTargets()
 }
 
 void Neuron::update(int dt)
-{
-	double input (0.0);
-	
+{	
 	spike_ = false; //by default, we don't have any spike
 	double sum_amplitudes(0.0); //contains all the amplitude of the arriving spike of excitatory and inhibitory neurons and from the random spiking external neurons
 	sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + randomSpikes();
-	assert (randomSpikes() >= 0.0);
-	/*if (neuron_clock_ >= n_clock_start and neuron_clock_ <= n_clock_stop){	//outside the clock of the neuron, there is no input. When the clock of the neuron start, the received input changes value.
-		input = external_input_;
-		sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + randomSpikes();
-		assert (randomSpikes() >= 0.0);
-	} else {
-		input = 0.0;
-	}*/
+
 	
 	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold
 		updateNeuronState(neuron_clock_);
@@ -184,8 +175,9 @@ void Neuron::update(int dt)
 	if (tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
-		V_membrane_= const1*V_membrane_ + input*const2 + sum_amplitudes;
+		V_membrane_= const1*V_membrane_ + external_input_*const2 + sum_amplitudes;
 	}
+	
 	setTimeBuffer(neuron_clock_%(D+1), 0.0);
 	neuron_clock_ += dt;	//the simulation advanced of a step dt
 }
@@ -194,17 +186,17 @@ void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
 {
 	std::random_device rd; //algorithme for generating random numbers
 	std::mt19937 gen(rd()); //algorithme for generating random numbers
-	std::uniform_int_distribution<> dis_e (0, excitatory_neurons); //distribution of random integer number
+	std::uniform_int_distribution<> dis_e (0, excitatory_neurons-1); //distribution of random integer number
 	
 	for (int i(0); i<c_e; ++i){ //for every excitatory connections that a neuron can receive, add this neuron to the targets of a random chosen neuron in the pool of neurons
 		neurons[dis_e(gen)]->addTargetNeuron(this); //the neuron randomly chosen add the current neuron as target
-		++nb_excitatory_connections; //take the count of the excitatory connections received by a neuron
+		++nb_excitatory_connections_; //take the count of the excitatory connections received by a neuron
 	}
 	
-	std::uniform_int_distribution<> dis_i (0, inhibitory_neurons); //distribution of random integer number
+	std::uniform_int_distribution<> dis_i (0, inhibitory_neurons-1); //distribution of random integer number
 	for (int i(0); i<c_i; ++i){//for every inhibitory connections that a neuron can receive, add this neuron to the targets of a random chosen neuron in the pool of neurons
-		neurons[9999+dis_i(gen)]->addTargetNeuron(this);//the neuron randomly chosen add the current neuron as target
-		++ nb_inhibitory_connections;//take the count of the inhibitory connections received by a neuron
+		neurons[excitatory_neurons+dis_i(gen)]->addTargetNeuron(this);//the neuron randomly chosen add the current neuron as target
+		++ nb_inhibitory_connections_;//take the count of the inhibitory connections received by a neuron
 	}
 }
 
