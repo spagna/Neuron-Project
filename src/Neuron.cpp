@@ -175,11 +175,16 @@ void Neuron::update(int dt)
 	if (tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
-		V_membrane_= const1*V_membrane_ + external_input_*const2 + sum_amplitudes;
+		solveMembraneEquation(external_input_, sum_amplitudes); 
 	}
 	
 	setTimeBuffer(neuron_clock_%(D+1), 0.0);
 	neuron_clock_ += dt;	//the simulation advanced of a step dt
+}
+
+void Neuron::solveMembraneEquation(double input, double random)
+{
+	V_membrane_ = const1*V_membrane_ + const2*input + random;
 }
 
 void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)

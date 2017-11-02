@@ -48,6 +48,7 @@ int main()
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
 			}
 		}
+		
 		simulation_time += N; //the simulation time advanced of a time step N
 		file1 << "Membrane potential at " << simulation_time*h << " milliseconds: " << neurons[0]->getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
 	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation

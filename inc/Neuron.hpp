@@ -85,7 +85,7 @@ public:
 	void updateTargets(); //if there is a spike, the buffers of all the targets of the neuron have to be filled with the corrisponding amplitude of the spike
 	void update(int dt); //at every time step, the neuron controle if he received an input or not and updates 	
 
-	
+	void solveMembraneEquation(double input, double random);
 	void addConnections (std::array<Neuron*, 12500>  neurons); //add connections between all neurons of the network. 
 	double randomSpikes (); //generates the random spikes arrived from outside the brain at every time step
 	
