@@ -288,16 +288,36 @@ public:
 	
 
 private:
-	double V_membrane_; //membrane potential
-	unsigned int nb_spikes_; //number of spikes
-	double t_spike_; //time when a spike occured
-	bool spike_; //true if a spike occured during a single time step, false otherwise
-	int neuron_clock_; //takes the count of the time step passed
-	double external_input_; //set the arbitrary input received 	
-	std::array <double, D+1> t_buffer_; //stock the value J every time that a spike occured but with a certain delay
-	std::vector <Neuron*> n_target_; //this vector contains all the post synaptic neurons (the targets for the current neuron)
-	bool excitatory_neuron_; //tell if a neuron is excitatory or inhibitory: true if exctitatory and false if inhibitory
+	//!< // Membrane potential in millivolts  */
+	double V_membrane_; 
+	//!< // Number of spikes stored during the simulation  */
+	unsigned int nb_spikes_; 
+	//!< // Time the last spike occured in milliseconds  */
+	double t_spike_; 
+	//!< // True if a spike has occured during the last update  */ 
+	bool spike_;
+	//!< // Local time of the neuron calculated in time step intervals
+	/*! Take the count of the time step interval */
+	int neuron_clock_; 
+	//!< // External input received in millivolts  */		
+	double external_input_; 
+	//!< // Time buffer  */
+	/*! The time buffer has a size of D+1 to allow to correct add the amplitudes in a case
+	 * that will be read with the correct delay by a target neuron.
+	 * It stores the amplitude/the sum of the amplitudes of the signals received by a neuron */
+	std::array <double, D+1> t_buffer_;  
+	//!< // Vector of targets  */
+	/*! Each neuron has a number of post synaptic neurons that 
+	 * has to update when a spike occurs */
+	std::vector <Neuron*> n_target_; 
+	//!< // Determine the role of a neuron  */
+	/*! If this member is true, the neuron will be an excitatory neuron.
+	 * Otherwise it will be an inhibitory neuron.
+	 * An excitatory neuron will give a different amplitude from an inhibitory neuron. */
+	bool excitatory_neuron_; 
+	//!< // Number of excitatory connections received by a neuron  */
 	int nb_excitatory_connections_;
+	//!< // Number of inhibitory connections received by a neuron  */
 	int nb_inhibitory_connections_;
 };
 
