@@ -22,17 +22,18 @@ add_test(Neuron_unittest Neuron_unittest)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 	# We check if the Doxygen configuration file exists
-	IF (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+	IF (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
 		message(FATAL_ERROR "Doxygen configuration file is needed to build the documentation:
-		-${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in not found.
+		-${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in not found.
 		-Generate one in the project folder with doxygen -g Doxyfile.in")
-	ENDIF(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+	ENDIF(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
 	
+
 	#We configure the doxyfile for make
-	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 	add_custom_target(doc
-		${DOXYGEN_EXECUTABLE}${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		WORKING_DIRECTORY${CMAKE_CURRENT_SOURCE_DIR}
+		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/inc
 	)
 ELSE(DOXYGEN_FOUND)
 	message(FATAL_ERROR "Doxygen is needed to build the documentation.")

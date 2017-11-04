@@ -288,7 +288,7 @@ public:
 	
 
 private:
-	//!< // Membrane potential in millivolts  */
+	
 	double V_membrane_; 
 	//!< // Number of spikes stored during the simulation  */
 	unsigned int nb_spikes_; 
