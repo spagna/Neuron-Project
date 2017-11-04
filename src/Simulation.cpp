@@ -5,7 +5,27 @@
 
 Simulation::Simulation()
 {}
-
+void Simulation::oneNeuronSimulation()
+{
+	Neuron n(true);
+	std::ofstream file;
+	file.open("Datas.txt");
+	assert(not file.fail());
+	double input(0.0);
+	std::cout << "Chose a value for the external input" << std::endl;
+	std::cin>>input;
+	n.setExternalInput(input);
+	int simulation_time = t_start; //the global simulation starts at step t_start
+	do {
+		n.update(1, 0.0);
+		if (n.getSpikeState()){
+			std::cout << "A spike occured at time: " << n.getNeuronClock()*h << std::endl;
+		}
+		simulation_time += N; //the simulation time advanced of a time step N
+		file << "Membrane potential at " << simulation_time*h << " milliseconds: " << n.getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
+	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation*/
+}
+	
 void Simulation::networkSimulation()
 {
 	std::ofstream file1, file2; //open a file to store the values of the membrane potentials
