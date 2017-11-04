@@ -8,61 +8,32 @@
 //////// input during the time interval [a,b] is 1.0 (so no spikes)
 
 TEST (NeuronTest, PositiveMembranePotential){
-	Neuron neuron(false);
+	Neuron neuron(true);
 	neuron.setExternalInput(1.0); 
-	neuron.solveMembraneEquation(neuron.getExternalInput(),0.0, 0.0);
-	
-	EXPECT_EQ(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane());
+	neuron.update(1, 0.0);
+	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);
 	
 }
-/*
+
 //TEST2: Test if the current membrane potential coincide with the equation if the external
 //////// input during the time interval [a.b] is -1.0 (so no spikes)
 TEST (NeuronTest, NegativeMembranePotential){
-	Neuron neuron(false);
+	Neuron neuron(true);
 	neuron.setExternalInput(-1.0);
-	neuron.setNeuronClock(n_clock_start);
-	neuron.update(1);
-	
-	EXPECT_EQ(-20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane());
+	neuron.update(1, 0.0);
+	EXPECT_NEAR(-20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);
 }
 
 //TEST3: Test if the current membrane potential coincide with the equation if the extenral 
 /////// input is 0.0 in the time interval [a,b] too
 TEST (NeuronTest, NulMembranePotential){
-	Neuron neuron (false);
+	Neuron neuron (true);
 	neuron.setExternalInput (0.0);
-	neuron.setNeuronClock(n_clock_start);
-	neuron.update(1);
-	
-	EXPECT_EQ(0.0, neuron.getV_membrane());
+	neuron.update(1, 0.0);
+	EXPECT_NEAR(0.0, neuron.getV_membrane(), 0.001);
 }
 
-
-
-//TEST4: Test if the current membrane potential is 0 outside the time interval
-/////// [a.b] even if an external input is applied. The neuron doesn't receive the 
-/////// input in this time interval. The test A checks before the interval.
-
-TEST (NeuronTest, OutsideExternalInputA){
-	Neuron neuron(false);
-	neuron.setExternalInput(1.01);
-	neuron.update(1);
-	
-	EXPECT_EQ(0.0, neuron.getV_membrane());
-}
-
-//TEST5: Test if the current membrane potential is 0 outside the time interval
-/////// [a.b] even if an external input is applied. The neuron doesn't receive the 
-/////// input in this time interval. The test B checks after the interval.
-TEST (NeuronTest, OutsideExternalInputB){
-	Neuron neuron(false);;
-	neuron.setExternalInput(1.01);
-	neuron.setNeuronClock(n_clock_stop+1);
-	neuron.update(1);
-	
-	EXPECT_EQ(0.0, neuron.getV_membrane());
-}
+/*
 
 //TEST6: Test if the time of the first spike (whick is 192.4 for an external input of 1.01)
 /////// is the same as we expect
