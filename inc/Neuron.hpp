@@ -12,37 +12,37 @@
 
 //here times are transformed in steps of simulation, to make comparisons more accurate
 //to have the exact value in milliseconds, it has to be multiplied by h 
-constexpr int t_start (0); //step simulation starts
-constexpr int t_stop (5000); //step simulation stops 
-constexpr int n_clock_start (1000); //neuron clock starts at step 1000 (at 100.0 in milliseconds) 
-constexpr int n_clock_stop (4000); //neuron clock stops at step 4000 (at 400.0 in milliseconds) 
-constexpr int tau (200); //time constant (20.0 in milliseconds) * h (note tau = R/C)
+constexpr int t_start (0);//!< step the simulation starts (0.0 milliseconds)
+constexpr int t_stop (5000); //!< step the simulation stops (500.0 milliseconds)
+constexpr int n_clock_start (1000); //!<neuron clock starts at step 1000 (at 100.0 in milliseconds) 
+constexpr int n_clock_stop (4000); //!< neuron clock stops at step 4000 (at 400.0 in milliseconds) 
+constexpr int tau (200); //!< time constant in terms of time steps (20.0 in milliseconds) (note tau = R/C)
 
-constexpr double V_thr (20.0); //firing threshold in microvolts 
-constexpr double V_refractory (0.0);
-constexpr int tau_rp (20); //refractory period (2.0 in milliseconds) * h
+constexpr double V_thr (20.0); //!< firing threshold in microvolts 
+constexpr double V_refractory (0.0); //!< refractory membrane potential in microvolts
+constexpr int tau_rp (20); //!< refractory period in terms of time steps (2.0 in milliseconds) 
 
-constexpr double h (0.1); //equidistant step of time during which the simulation evolves
-constexpr int N(1); //step of simulations 
-constexpr int D(15); //delay (how many time after the post-synpatic neuron receives a spike) (=1.0 in milliseconds)
-constexpr double J(0.1); //amplitude of the signal 
+constexpr double h (0.1); //!< equidistant step of time during which the simulation evolves (in milliseconds)
+constexpr int N(1); //!< step of simulations 
+constexpr int D(15); //!< delay: time steps needed before the post-synpatic neuron receives a spike (1.0 in milliseconds)
+constexpr double J(0.1); //!< amplitude of the signal in microvolts
 
-constexpr unsigned int C (1); //number of connections from other neurons
-constexpr double R (20.0); //membrane resistance
-constexpr double const1 (exp(-h/(tau*h))); //constant 1 of the membrane equation
-constexpr double const2 (R*(1 - const1)); //constante 2 of the membrane equation
+constexpr unsigned int C (1); //!< number of connections from other neurons
+constexpr double R (20.0); //!< /membrane resistance
+constexpr double const1 (exp(-h/(tau*h))); //!< constant 1 of the membrane equation
+constexpr double const2 (R*(1 - const1)); //!< constante 2 of the membrane equation
 
-constexpr int total_neurons (12500); //total number of neurons in the network
-constexpr int excitatory_neurons (10000); //number of excitatory neurons
-constexpr int inhibitory_neurons (2500); //number of inhibitory neurons
-constexpr int c_e (1000); //connections received from excitatory neurons
-constexpr int c_i (250); //connections received from inhibitory neurons
-constexpr int c_ext (c_e); //connections received from the rest of the brain 
-constexpr double J_e (0.1); //amplitude of the signal from an excitatory neuron
-constexpr double J_i (0.5); //amplitude of the signal from an inhibitory neuron
+constexpr int total_neurons (12500); //!< total number of neurons in the network
+constexpr int excitatory_neurons (10000); //!< number of excitatory neurons
+constexpr int inhibitory_neurons (2500); //!< number of inhibitory neurons
+constexpr int c_e (1000); //!< connections received from excitatory neurons
+constexpr int c_i (250); //!< connections received from inhibitory neurons
+constexpr int c_ext (c_e); //!< connections received from the rest of the brain 
+constexpr double J_e (0.1); //!< amplitude of the signal from an excitatory neuron
+constexpr double J_i (0.5); //!< /amplitude of the signal from an inhibitory neuron
 
-constexpr double v_ext (0.02);//(V_thr/(nb_excitatory_c*J_e*tau)); //rate at which every neuron receives additional random input from the rest of the brain
-constexpr double poisson_gen(v_ext*c_e*h*J_e); //rate of possion generator 
+constexpr double v_ext (0.02); //!< rate at which every neuron receives additional random input from the rest of the brain
+constexpr double poisson_gen(v_ext*c_e*h); //!< rate of possion generator 
 
 /*!
      * @class Neuron
@@ -229,7 +229,7 @@ public:
 	 * @param val : a double indicating the amplitude of the signal that need to be stored
 	 */
 	 
-	void setTimeBuffer (int i, double val); //set the value val in the case i of the buffer
+	void setTimeBuffer (int i, double val); 
 	/*!
 	 * @brief Set a case of the vector of target neurons.
 	 *
@@ -269,7 +269,7 @@ public:
 	 * @param i : an integer inidcating the case that has to be filled
 	 * @param val : a double indicating the amplitude of the signal received that has to be stored
 	 */
-	void addTimeBuffer (int i, double val); //this function add a value to a specif case of the time buffer, and if another values different from 0 is alredy present, it increments it
+	void addTimeBuffer (int i, double val); 
 	/*!
 	 * @brief Fill the vector of target neurons
 	 * @details Each time a neuron is connected to another neuron, it has to store a pointer on the 
@@ -311,7 +311,7 @@ public:
 	 * @param dt : an integer indicating the time step. Every time step the neuron has to be checked and updated.
 	 * 
 	 */
-	void update(int dt, double noise); //at every time step, the neuron controle if he received an input or not and updates 	
+	void update(int dt, double noise); 	
 
 
 	/*!
@@ -334,19 +334,22 @@ public:
 	 * 
 	 * @param neurons : an array of pointer on neurons correponding to the neurons of the whole network (12500).
 	 */
-	void addConnections (std::array<Neuron*, total_neurons>  neurons); //add connections between all neurons of the network. 
+	void addConnections (std::array<Neuron*, total_neurons>  neurons); 
 	
 	/*!
 	 * @brief Generate random amplitudes from the rest of the brain
 	 * @details At each time step, a neuron receives a certain number of amplitudes that come
 	 * from the rest of the brain. The number of random spikes received is implemented by a poisson generator.
 	 * The external neurons spike randomly and give only excitatory inpulses. 
+	 * The random generators are static members because we need just one copy of the values
+	 * and the neurons don't have to generate them every update every step. This makes the 
+	 * compilation faster
 	 *
 	 * @return A double J_e*dis_ext(gen): the total amplitudes.
 	 * @details The amplitude given by an excitatory neuron multiplied by the number 
 	 * generated randomly by the poisson distribution.
 	 */
-	double randomSpikes (); //generates the random spikes arrived from outside the brain at every time step
+	double randomSpikes (); 
 	
 	/*!
      * @brief The destructor of the class Neuron
