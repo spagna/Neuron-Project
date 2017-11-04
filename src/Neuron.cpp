@@ -165,9 +165,6 @@ void Neuron::updateTargets()
 void Neuron::update(int dt, double noise)
 {	
 	spike_ = false; //by default, we don't have any spike
-	double sum_amplitudes(0.0); //contains all the amplitude of the arriving spike of excitatory and inhibitory neurons and from the random spiking external neurons
-	sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + noise;
-
 	
 	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold
 		updateNeuronState(neuron_clock_);
@@ -176,16 +173,16 @@ void Neuron::update(int dt, double noise)
 	if (tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
-		solveMembraneEquation(external_input_, sum_amplitudes); 
+		solveMembraneEquation(external_input_, getTimeBuffer((neuron_clock_)%(D+1)), noise); 
 	}
 	
 	setTimeBuffer(neuron_clock_%(D+1), 0.0);
 	neuron_clock_ += dt;	//the simulation advanced of a step dt
 }
 
-void Neuron::solveMembraneEquation(double input, double random)
+void Neuron::solveMembraneEquation(double input, double ampl, double random)
 {
-	V_membrane_ = const1*V_membrane_ + const2*input + random;
+	V_membrane_ = const1*V_membrane_ + const2*input + ampl +random;
 }
 
 void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)

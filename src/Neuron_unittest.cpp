@@ -10,7 +10,7 @@
 TEST (NeuronTest, PositiveMembranePotential){
 	Neuron neuron(false);
 	neuron.setExternalInput(1.0); 
-	neuron.solveMembraneEquation(neuron.getExternalInput(), 0.0);
+	neuron.solveMembraneEquation(neuron.getExternalInput(),0.0, 0.0);
 	
 	EXPECT_EQ(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane());
 	

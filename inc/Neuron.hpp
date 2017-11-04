@@ -303,9 +303,10 @@ public:
 	 * The equation depends on some external parameters and two constants.
 	 * 		 
 	 * @param input : a double indicating the external input
+	 * @param ampl : a double indicating the amplitud of the amplitude found in the time buffer
 	 * @param random : a double indicating the amplitude of the external signal that randomly occured
 	 */
-	void solveMembraneEquation(double input, double random);
+	void solveMembraneEquation(double input, double ampl, double random);
 	
 	/*!
 	 * @brief Add the connections between all neurons in the network
@@ -368,6 +369,7 @@ private:
 	int nb_excitatory_connections_; //!< Number of excitatory connections received by a neuron 
 	
 	int nb_inhibitory_connections_; //!< Number of inhibitory connections received by a neuron  
+
 };
 
 #endif
