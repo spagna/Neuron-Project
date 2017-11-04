@@ -2,17 +2,17 @@
 #include <iostream>
 
 
-Neuron::Neuron (double V_membrane, unsigned int nb_spikes,
+Neuron::Neuron (bool excitatory_neuron, 
+				double V_membrane, unsigned int nb_spikes,
 				double t_spike, 
 				bool spike, int neuron_clock, 
-				double external_input,
-				bool excitatory_neuron)
-: V_membrane_ (V_membrane),
+				double external_input)
+: excitatory_neuron_(excitatory_neuron),
+  V_membrane_ (V_membrane),
   nb_spikes_(nb_spikes), 
   t_spike_(t_spike), spike_(spike), 
   neuron_clock_ (neuron_clock), 
-  external_input_(external_input), 
-  excitatory_neuron_ (excitatory_neuron)
+  external_input_(external_input)
 {
 	for (size_t i(0); i<t_buffer_.size(); ++i){
 		t_buffer_[i] = 0.0;

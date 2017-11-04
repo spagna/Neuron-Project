@@ -14,10 +14,8 @@ void Simulation::networkSimulation()
 	file2.open("Spike_time.txt");
 	assert (not file2.fail());
 
-	Neuron n_excitatory;
-	n_excitatory.setExcitatoryNeuron(true);
-	Neuron n_inhibitory;
-	n_inhibitory.setExcitatoryNeuron(false);
+	Neuron n_excitatory(true);
+	Neuron n_inhibitory (false);
 	
 	std::array <Neuron*, total_neurons> neurons;
 	for (size_t i(0); i<neurons.size(); ++i){
@@ -51,4 +49,8 @@ void Simulation::networkSimulation()
 		simulation_time += N; //the simulation time advanced of a time step N
 		file1 << "Membrane potential at " << simulation_time*h << " milliseconds: " << neurons[0]->getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
 	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation*/
+	for (size_t i(0); i<neurons.size(); ++i){ 
+		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
+	}
 }
+

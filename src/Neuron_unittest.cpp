@@ -8,7 +8,7 @@
 //////// input during the time interval [a,b] is 1.0 (so no spikes)
 
 TEST (NeuronTest, PositiveMembranePotential){
-	Neuron neuron;
+	Neuron neuron(false);
 	neuron.setExternalInput(1.0); 
 	neuron.setNeuronClock(n_clock_start);
 	neuron.update(1);
@@ -20,7 +20,7 @@ TEST (NeuronTest, PositiveMembranePotential){
 //TEST2: Test if the current membrane potential coincide with the equation if the external
 //////// input during the time interval [a.b] is -1.0 (so no spikes)
 TEST (NeuronTest, NegativeMembranePotential){
-	Neuron neuron;
+	Neuron neuron(false);
 	neuron.setExternalInput(-1.0);
 	neuron.setNeuronClock(n_clock_start);
 	neuron.update(1);
@@ -31,7 +31,7 @@ TEST (NeuronTest, NegativeMembranePotential){
 //TEST3: Test if the current membrane potential coincide with the equation if the extenral 
 /////// input is 0.0 in the time interval [a,b] too
 TEST (NeuronTest, NulMembranePotential){
-	Neuron neuron;
+	Neuron neuron (false);
 	neuron.setExternalInput (0.0);
 	neuron.setNeuronClock(n_clock_start);
 	neuron.update(1);
@@ -46,7 +46,7 @@ TEST (NeuronTest, NulMembranePotential){
 /////// input in this time interval. The test A checks before the interval.
 
 TEST (NeuronTest, OutsideExternalInputA){
-	Neuron neuron;
+	Neuron neuron(false);
 	neuron.setExternalInput(1.01);
 	neuron.update(1);
 	
@@ -57,7 +57,7 @@ TEST (NeuronTest, OutsideExternalInputA){
 /////// [a.b] even if an external input is applied. The neuron doesn't receive the 
 /////// input in this time interval. The test B checks after the interval.
 TEST (NeuronTest, OutsideExternalInputB){
-	Neuron neuron;
+	Neuron neuron(false);;
 	neuron.setExternalInput(1.01);
 	neuron.setNeuronClock(n_clock_stop+1);
 	neuron.update(1);
@@ -68,7 +68,7 @@ TEST (NeuronTest, OutsideExternalInputB){
 //TEST6: Test if the time of the first spike (whick is 192.4 for an external input of 1.01)
 /////// is the same as we expect
 TEST (NeuronTest, SpikeTimes){
-	Neuron neuron; 
+	Neuron neuron (false); 
 	neuron.setExternalInput(1.01);
 	neuron.setNeuronClock(n_clock_start);
 	do {
@@ -81,8 +81,8 @@ TEST (NeuronTest, SpikeTimes){
 }
 
 TEST (NeuronTest, Delay){
-	Neuron neuron1;
-	Neuron neuron2;
+	Neuron neuron1(false);
+	Neuron neuron2(false);
 	neuron1.addTargetNeuron(&neuron2);
 	neuron1.setExternalInput(1.01);
 	neuron1.setNeuronClock(n_clock_start);

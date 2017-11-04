@@ -70,25 +70,25 @@ public:
      * @details The constructor initialize the following argument by default:
      * the membrane potential is 0.0 mV, the number of spikes is 0, the time of the last spike is 0.0 msec,
      * the spike state is false because no spikes has occured yet,
-     * the local neuron clock is 0 time step, the external input is 0.0 mV and the all neurons are excitatory at
-     * the very beginning of the simulation.
+     * the local neuron clock is 0 time step, the external input is 0.0 mV.
+     * The only argument needed by the neuron at the moment of its creation is the boolean excitatory.
+     * It's true if we want to create an excitatory neuron and false for an inhibitory one.
      * The time buffer is initialize in the .cpp file, and all the D+1 cases are inizialized to 0.0 mV.
      * 
+     * @param excitatory_neuron : a boolean indicating that the neuron is excitatory
      * @param membranePotential : a double indicating the initial membrane potential
      * @param nb_spikes : a positive integer indicating the initial number of spikes
      * @param t_spike : a double indicating the initial time stored for a spike in milliseconds
      * @param spike : a boolean indicating that no spikes occured before the simulation starts
      * @param neuron_clock : an integer indicating the initial local time of the neuron in terms of time steps
      * @param external_input : a double indicating the initial input percived 
-     * @param excitatory_neuron : a boolean indicating that the neuron is excitatory
      *
      */
 	
-	Neuron (double membranePotential = 0.0, unsigned int nb_spikes = 0, 
+	Neuron (bool excitatory_neuron,
+			double membranePotential = 0.0, unsigned int nb_spikes = 0, 
 			double t_spike = 0.0, bool spike = false,	
-			int neuron_clock = 0, 
-			double external_input = 0.0,
-			bool excitatory_neuron = true);
+			int neuron_clock = 0, double external_input = 0.0);
 	
 	 /*!
      * @brief Get the membrane potential.
