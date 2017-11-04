@@ -12,6 +12,7 @@ class Simulation
 public:
 	Simulation();
 	void oneNeuronSimulation();
+	void twoNeruonsSimulation();
 	void networkSimulation();
 	
 private:
