@@ -2,6 +2,7 @@
 #define SIMULATION_H
 
 #include <iostream>
+#include <fstream>
 #include <array>
 #include <vector>
 #include <cassert> 
