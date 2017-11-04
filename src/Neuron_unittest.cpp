@@ -33,23 +33,22 @@ TEST (NeuronTest, NulMembranePotential){
 	EXPECT_NEAR(0.0, neuron.getV_membrane(), 0.001);
 }
 
-/*
 
-//TEST6: Test if the time of the first spike (whick is 192.4 for an external input of 1.01)
+
+//TEST6: Test if the time of the first spike (whick is 92.4 for an external input of 1.01)
 /////// is the same as we expect
 TEST (NeuronTest, SpikeTimes){
-	Neuron neuron (false); 
+	Neuron neuron (true); 
 	neuron.setExternalInput(1.01);
-	neuron.setNeuronClock(n_clock_start);
 	do {
-		neuron.update(1);
-	} while (neuron.getNeuronClock() < 1924);
+		neuron.update(1, 0.0);
+	} while (neuron.getNeuronClock() < 924);
 	EXPECT_NEAR (neuron.getV_membrane(), 20.0, 0.001);
-	neuron.update(1);
-	EXPECT_EQ (192.4, neuron.getTimeSpike());
+	neuron.update(1, 0.0);
+	EXPECT_EQ (92.4, neuron.getTimeSpike());
 	EXPECT_NEAR (neuron.getV_membrane(), 0.0, 0.001);
 }
-
+/*
 TEST (NeuronTest, Delay){
 	Neuron neuron1(false);
 	Neuron neuron2(false);

@@ -7,23 +7,23 @@ Simulation::Simulation()
 {}
 void Simulation::oneNeuronSimulation()
 {
-	Neuron n(true);
-	std::ofstream file;
+	Neuron n(true); //an excitatory neuron declared
+	std::ofstream file; //open a file to write down the values of the membrane potential at each time step
 	file.open("Datas.txt");
-	assert(not file.fail());
-	double input(0.0);
+	assert(not file.fail()); //control if the file opens correctly
+	double input(0.0); //the user decide the external input
 	std::cout << "Chose a value for the external input" << std::endl;
 	std::cin>>input;
 	n.setExternalInput(input);
 	int simulation_time = t_start; //the global simulation starts at step t_start
-	do {
-		n.update(1, 0.0);
-		if (n.getSpikeState()){
-			std::cout << "A spike occured at time: " << n.getNeuronClock()*h << std::endl;
+	do { //update all the neurons of the simulation
+		n.update(1, 0.0); //no noise is added at the update function for one neuron simulation
+		if (n.getSpikeState()){ //write in the terminal the time of the spike
+			std::cout << "A spike occured at time: " << simulation_time*h << std::endl;
 		}
 		simulation_time += N; //the simulation time advanced of a time step N
 		file << "Membrane potential at " << simulation_time*h << " milliseconds: " << n.getV_membrane() << std::endl; //the membrane potential is stored in Datas.txt
-	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation*/
+	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation
 }
 	
 void Simulation::networkSimulation()
@@ -60,7 +60,7 @@ void Simulation::networkSimulation()
 		
 		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
 			assert (neurons[i] != nullptr);
-			neurons[i]->update(N, neurons[i]->randomSpikes());
+			neurons[i]->update(N, neurons[i]->randomSpikes()); 
 			if (neurons[i]->getSpikeState()){
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
 			}
