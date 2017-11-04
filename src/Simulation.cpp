@@ -1,6 +1,9 @@
 #include "Simulation.hpp"
 #include "Neuron.hpp"
 #include <iostream>
+#include <fstream>
+#include <array>
+#include <vector>
 
 
 Simulation::Simulation()
@@ -10,7 +13,7 @@ void Simulation::oneNeuronSimulation()
 	Neuron n(true); //an excitatory neuron declared
 	std::ofstream file; //open a file to write down the values of the membrane potential at each time step
 	file.open("Datas.txt");
-	assert(not file.fail()); //control if the file opens correctly
+	assert(not file.fail()); //check if the file opens correctly
 	double input(0.0); //the user decide the external input
 	std::cout << "Chose a value for the external input" << std::endl;
 	std::cin>>input;
@@ -54,46 +57,45 @@ void Simulation::twoNeruonsSimulation()
 	
 void Simulation::networkSimulation()
 {
-	std::ofstream file2; //open a file to store the values of the membrane potentials
+	std::ofstream file2; //open a file to store the time of all the spikes of all neurons
 	file2.open("Spike_time.txt");
-	assert (not file2.fail());
+	assert (not file2.fail());  //check if the file opens correctly
 
 	Neuron n_excitatory(true);
 	Neuron n_inhibitory (false);
-	
+	 //initiliaze the array representing the network of 12500 neurons
 	std::array <Neuron*, total_neurons> neurons;
 	for (size_t i(0); i<neurons.size(); ++i){
-		if (i<excitatory_neurons){
+		if (i<excitatory_neurons){//from 0 to 9999 the neurons are excitatory
 			neurons[i] = new Neuron(n_excitatory);
 		} else {
-			neurons[i] = new Neuron (n_inhibitory);
+			neurons[i] = new Neuron (n_inhibitory);//from 9999 to 12499 the neurons are inhibitory
 		}
+		assert(neurons[i] != nullptr); //check that no neurons in the end is nullptr
 	}
-	for (auto n: neurons){
-		assert(n!=nullptr);
-	}
-	
+	//add the connections between each neuron
 	for (auto n : neurons){
 		n->addConnections(neurons);	
+		//check that each neuron has 1000 excitatory connections and 250 inhibitory connections
 		assert (n->getExcitatoryConnections() == 1000);
 		assert (n->getInhibitoryConnections() == 250);
 	}
 	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do {
-		
 		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
-			assert (neurons[i] != nullptr);
-			neurons[i]->update(N, neurons[i]->randomSpikes()); 
-			if (neurons[i]->getSpikeState()){
+			assert (neurons[i] != nullptr); //check always that the neurons are nullptr
+			neurons[i]->update(N, neurons[i]->randomSpikes());  //update with the noise given by random spikes
+			if (neurons[i]->getSpikeState()){ //when a neuron spikes, write down the time and the index of the neuron
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
 			}
 		}
-		
-		simulation_time += N; //the simulation time advanced of a time step N
+		simulation_time += N; //the simulation time advanced of a time step N after all neuron clocks have already advanced
 	} while (simulation_time < t_stop); //unitl it reaches the end of the global simulation*/
 	for (size_t i(0); i<neurons.size(); ++i){ 
 		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
 	}
 }
 
+Simulation::~Simulation()
+{}

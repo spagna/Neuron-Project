@@ -2,10 +2,6 @@
 #define SIMULATION_H
 
 #include <iostream>
-#include <fstream>
-#include <array>
-#include <vector>
-#include <cassert> 
 
 /*!
      * @class Simulation
@@ -57,7 +53,11 @@ public:
 	void networkSimulation();
 	
 	
-	
+	/*!
+     * @brief Destructor of the Simulation class
+     */
+	~Simulation();
+
 private:
 	
 };

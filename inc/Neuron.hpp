@@ -102,6 +102,7 @@ public:
 			int neuron_clock = 0, double external_input = 0.0,
 			bool r_period = false);
 	
+	
 	 /*!
      * @brief Get the membrane potential.
      *
