@@ -44,7 +44,7 @@ class Network
 	
 	
 private:
-	std::array <Neuron*, 12500> neurons; //!< Vector of neurons populating the network
+	std::array <Neuron*, total_neurons> neurons; //!< Vector of neurons populating the network
 };
 
 #endif
