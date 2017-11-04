@@ -32,6 +32,7 @@ constexpr double R (20.0); //membrane resistance
 constexpr double const1 (exp(-h/(tau*h))); //constant 1 of the membrane equation
 constexpr double const2 (R*(1 - const1)); //constante 2 of the membrane equation
 
+constexpr int total_neurons (12500); //total number of neurons in the network
 constexpr int excitatory_neurons (10000); //number of excitatory neurons
 constexpr int inhibitory_neurons (2500); //number of inhibitory neurons
 constexpr int c_e (1000); //connections received from excitatory neurons
