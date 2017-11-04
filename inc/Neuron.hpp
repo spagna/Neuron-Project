@@ -70,7 +70,8 @@ public:
      * @details The constructor initialize the following argument by default:
      * the membrane potential is 0.0 mV, the number of spikes is 0, the time of the last spike is 0.0 msec,
      * the spike state is false because no spikes has occured yet,
-     * the local neuron clock is 0 time step, the external input is 0.0 mV.
+     * the local neuron clock is 0 time step, the external input is 0.0 mV and the refractory period 
+     * is initialize to false so that the neuron can start receiving spike at time 0.
      * The only argument needed by the neuron at the moment of its creation is the boolean excitatory.
      * It's true if we want to create an excitatory neuron and false for an inhibitory one.
      * The time buffer is initialize in the .cpp file, and all the D+1 cases are inizialized to 0.0 mV.
@@ -88,7 +89,8 @@ public:
 	Neuron (bool excitatory_neuron,
 			double membranePotential = 0.0, unsigned int nb_spikes = 0, 
 			double t_spike = 0.0, bool spike = false,	
-			int neuron_clock = 0, double external_input = 0.0);
+			int neuron_clock = 0, double external_input = 0.0,
+			bool r_period = false);
 	
 	 /*!
      * @brief Get the membrane potential.
@@ -128,6 +130,15 @@ public:
      * @return A double external_input_: the external input received external_input_
      */
 	double getExternalInput() const;
+	
+	/*!
+     * @brief Get the refractory state 
+     * @details If it's true, the neuron is in his refractory period, if false it can receive stimuli
+     * 
+     * @return A boolean r_period_: the refractory state of the neruon
+     */
+	bool getRefractoryState() const;
+	
 	/*!
 	 * @brief Get the amplitude stored in the time buffer in a specific case
 	 * @details The amplitude is stored depending on the current time and the delay.
@@ -206,11 +217,18 @@ public:
 	 */
 	void setExternalInput (double external_input);
 	/*!
+	 * @brief Set the refractory state of the neuron
+	 *
+	 * @param r : a boolean indicating if the neruon is in its refractory period (true) or not
+	 */
+	void setRefractoryState (bool r);
+	/*!
 	 * @brief Set a case of the time buffer 
 	 *
 	 * @param i : an integer indicating the case that has to be filled
 	 * @param val : a double indicating the amplitude of the signal that need to be stored
 	 */
+	 
 	void setTimeBuffer (int i, double val); //set the value val in the case i of the buffer
 	/*!
 	 * @brief Set a case of the vector of target neurons.
@@ -338,6 +356,10 @@ public:
 	
 
 private:
+	bool excitatory_neuron_; //!< Determine the role of a neuron  
+	//!< If this member is true, the neuron will be an excitatory neuron.
+	//!< Otherwise it will be an inhibitory neuron.
+	//!< An excitatory neuron will give a different amplitude from an inhibitory neuron. 
 	
 	double V_membrane_; //!< Membrane potential in millivolts  
 	
@@ -350,7 +372,9 @@ private:
 	int neuron_clock_; //!< Local time of the neuron calculated in time step intervals
 	//!< Take the count of the time step interval 
 	
-	double external_input_; //!< External input received in millivolts  	
+	double external_input_; //!< External input received in millivolts  
+	
+	bool r_period_;	//!< Refractory state: true if the neuron is in its refractory period and can't receive stimuli 
 	
 	std::array <double, D+1> t_buffer_;//!<  Time buffer  
 	//!< The time buffer has a size of D+1 to allow to correct add the amplitudes in a case
@@ -360,11 +384,6 @@ private:
 	std::vector <Neuron*> n_target_; //!< Vector of targets 
 	//!< Each neuron has a number of post synaptic neurons that 
 	//!< has to update when a spike occurs 
-	
-	bool excitatory_neuron_; //!< Determine the role of a neuron  
-	//!< If this member is true, the neuron will be an excitatory neuron.
-	//!< Otherwise it will be an inhibitory neuron.
-	//!< An excitatory neuron will give a different amplitude from an inhibitory neuron. 
 	
 	int nb_excitatory_connections_; //!< Number of excitatory connections received by a neuron 
 	

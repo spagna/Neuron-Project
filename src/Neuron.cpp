@@ -6,14 +6,16 @@ Neuron::Neuron (bool excitatory_neuron,
 				double V_membrane, unsigned int nb_spikes,
 				double t_spike, 
 				bool spike, int neuron_clock, 
-				double external_input)
+				double external_input,
+				bool r_period)
 				
 : excitatory_neuron_(excitatory_neuron),
   V_membrane_ (V_membrane),
   nb_spikes_(nb_spikes), 
   t_spike_(t_spike), spike_(spike), 
   neuron_clock_ (neuron_clock), 
-  external_input_(external_input)
+  external_input_(external_input),
+  r_period_(r_period)
 {
 	for (size_t i(0); i<t_buffer_.size(); ++i){
 		t_buffer_[i] = 0.0;
@@ -48,6 +50,11 @@ int Neuron::getNeuronClock() const
 double Neuron::getExternalInput() const
 {
 	return external_input_;
+}
+
+bool Neuron::getRefractoryState() const
+{
+	return r_period_;
 }
 
 double Neuron::getTimeBuffer (int i) const
@@ -107,6 +114,11 @@ void Neuron::setExternalInput (double external_input)
 	external_input_ = external_input;
 }
 
+void Neuron::setRefractoryState(bool r)
+{
+	r_period_ = r;
+}
+
 void Neuron::setTimeBuffer (int i, double val)
 {
 	t_buffer_[i] = val;
@@ -148,6 +160,7 @@ void Neuron::updateNeuronState (int dt)
 	t_spike_ = dt*h;//store the time of the spike 
 	++nb_spikes_; //the number of spike increases of one
 	spike_ = true; //the spike has occured
+	r_period_= true;
 }
 
 void Neuron::updateTargets()
@@ -170,9 +183,10 @@ void Neuron::update(int dt, double noise)
 		updateNeuronState(neuron_clock_);
 		updateTargets();
 	} 
-	if (tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
+	if (r_period_ and tau_rp > neuron_clock_ - t_spike_/h){ //if the neuron is in its refractory state and it's still in its refractory period
 		V_membrane_ = V_refractory; //the membrane potential is zero
 	} else {
+		r_period_ = false;
 		solveMembraneEquation(external_input_, getTimeBuffer((neuron_clock_)%(D+1)), noise); 
 	}
 	
