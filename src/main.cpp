@@ -7,9 +7,9 @@
 int main()
 {
 	Simulation sim;
-	//sim.networkSimulation();
+	sim.networkSimulation();
 	//sim.oneNeuronSimulation();
-	sim.twoNeruonsSimulation();
+	//sim.twoNeruonsSimulation();
 	std::cout << "Simulation done" << std::endl;
 	return 0;
 }

@@ -167,7 +167,7 @@ void Neuron::updateNeuronState (int dt)
 
 void Neuron::updateTargets()
 {
-	for (auto n: n_target_){
+	for (auto const& n: n_target_){
 		assert(n != nullptr); //control that the targents aren't nullptr
 		if (excitatory_neuron_){
 			// the time buffer is fulled with a certain J from 
@@ -242,7 +242,7 @@ void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
 	}
 }
 
-double Neuron::randomSpikes()
+double Neuron::randomSpikes() const
 {
 	static std::random_device rd; //algorithme for generating random numbers
 	static std::mt19937 gen(rd()); //algorithme for generating random numbers

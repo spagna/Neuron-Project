@@ -98,10 +98,10 @@ TEST (NeuronTest, Delay){
 TEST (NeuronTest, Connections){
 	std::array <Neuron*, 12500> neurons; //network
 	//add the connections between every neuron
-	for (auto n: neurons){
+	for (auto const& n: neurons){
 		n->addConnections(neurons);
 		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
-		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections
+		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections 
 	}
 }
 	

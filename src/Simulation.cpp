@@ -74,11 +74,8 @@ void Simulation::networkSimulation()
 		assert(neurons[i] != nullptr); //check that no neurons in the end is nullptr
 	}
 	//add the connections between each neuron
-	for (auto n : neurons){
+	for (auto const& n : neurons){
 		n->addConnections(neurons);	
-		//check that each neuron has 1000 excitatory connections and 250 inhibitory connections
-		assert (n->getExcitatoryConnections() == 1000);
-		assert (n->getInhibitoryConnections() == 250);
 	}
 	
 	int simulation_time = t_start; //the global simulation starts at step t_start

@@ -360,7 +360,7 @@ public:
 	 * @details The amplitude given by an excitatory neuron multiplied by the number 
 	 * generated randomly by the poisson distribution.
 	 */
-	double randomSpikes (); 
+	double randomSpikes () const; 
 	
 	/*!
      * @brief The destructor of the class Neuron
