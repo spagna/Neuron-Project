@@ -35,7 +35,7 @@ TEST (NeuronTest, NulMembranePotential){
 
 
 
-//TEST6: Test if the time of the first spike (whick is 92.4 for an external input of 1.01)
+//TEST4: Test if the time of the first spike (whick is 92.4 for an external input of 1.01)
 /////// is the same as we expect
 TEST (NeuronTest, SpikeTimes){
 	Neuron neuron (true); 
@@ -48,36 +48,29 @@ TEST (NeuronTest, SpikeTimes){
 	EXPECT_EQ (92.4, neuron.getTimeSpike());
 	EXPECT_NEAR (neuron.getV_membrane(), 0.0, 0.001);
 }
-/*
+
+//TEST4:Test if the post-synaptic neuron receives the spike with the correct delay
 TEST (NeuronTest, Delay){
-	Neuron neuron1(false);
-	Neuron neuron2(false);
+	Neuron neuron1(true); 
+	Neuron neuron2(true);
 	neuron1.addTargetNeuron(&neuron2);
 	neuron1.setExternalInput(1.01);
-	neuron1.setNeuronClock(n_clock_start);
-	neuron2.setExternalInput(0.0);
-	neuron2.setNeuronClock(n_clock_start);
+
 	do {
-		neuron1.update(1);
-		neuron2.update(1);
-	} while (neuron1.getNeuronClock() < 1924);
+		neuron1.update(1, 0.0);
+		neuron2.update(1, 0.0);
+	} while (neuron1.getNeuronClock() < 924);
 	EXPECT_NEAR (neuron1.getV_membrane(), 20.0, 0.001);
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001);
-	neuron1.update(1);
-	neuron2.update(1);
+	neuron1.update(1, 0.0);
+	neuron2.update(1, 0.0);
 	EXPECT_NEAR (neuron1.getV_membrane(), 0.0, 0.001);
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001);
-
 	for (int i(0); i<=D; ++i){
-		neuron2.update(1);
+		neuron2.update(1, 0.0);
 		}
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.1, 0.001);
-	neuron1.update(1);
-	
-	
 }
-			
-	 */
 
 
 

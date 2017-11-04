@@ -39,7 +39,8 @@ void Simulation::twoNeruonsSimulation()
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do { //update all the neurons of the simulation
 		neuron1.update(1, 0.0); //no noise is added at the update function for one neuron simulation
-		if (neuron2.getTimeBuffer((simulation_time)%(D+1)) != 0){
+		if (neuron2.getTimeBuffer((simulation_time)%(D+1)) != 0){ //read if there is an amplitude in the time buffer
+			//if an amplitude is present, the time the neurons receives the spike is written in the terminal
 			std::cout << "The spike is received at time: " << simulation_time*h << std::endl;
 		}
 		neuron2.update(1, 0.0);
