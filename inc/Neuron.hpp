@@ -345,7 +345,7 @@ public:
 	 * 
 	 * @param neurons : an array of pointer on neurons correponding to the neurons of the whole network (12500).
 	 */
-	void addConnections (std::array<Neuron*, total_neurons>  neurons); 
+	void addConnections (std::array<Neuron*, total_neurons>  const& neurons); 
 	
 	/*!
 	 * @brief Generate random amplitudes from the rest of the brain

@@ -214,7 +214,7 @@ void Neuron::solveMembraneEquation(double input, double ampl, double random)
 	V_membrane_ = const1*V_membrane_ + const2*input + ampl + random;
 }
 
-void Neuron::addConnections(std::array<Neuron*, 12500>  neurons)
+void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 {
 	std::random_device rd; //algorithme for generating random numbers
 	std::mt19937 gen(rd()); //algorithme for generating random numbers

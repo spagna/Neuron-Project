@@ -5,6 +5,10 @@
 #include <cassert>
 
 
+int main(int argc, char**argv){
+	::testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
+}
 /*
  * TEST1: Test if the membrane potential of the neuron is coeherent with the membrane equation.
  * The used external input is positive, thus the membrane potential has to be positive too.
@@ -98,12 +102,29 @@ TEST (NeuronTest, Delay){
 TEST (NeuronTest, Connections){
 	std::array <Neuron*, 12500> neurons; //network
 	//add the connections between every neuron
+	Neuron n_excitatory(true);
+	Neuron n_inhibitory (false);
+	 //initiliaze the array representing the network of 12500 neurons
+	for (size_t i(0); i<neurons.size(); ++i){
+		if (i<excitatory_neurons){//from 0 to 9999 the neurons are excitatory
+			neurons[i] = new Neuron(n_excitatory);
+		} else {
+			neurons[i] = new Neuron (n_inhibitory);//from 9999 to 12499 the neurons are inhibitory
+		}
+		assert(neurons[i] != nullptr); //check that no neurons in the end is nullptr
+	}
 	for (auto const& n: neurons){
 		n->addConnections(neurons);
 		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
 		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections 
 	}
+	for (auto& n:neurons){
+		n = nullptr;
+		delete n;
+	}
 }
+
+
 	
 
 
