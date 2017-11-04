@@ -7,6 +7,7 @@ Neuron::Neuron (bool excitatory_neuron,
 				double t_spike, 
 				bool spike, int neuron_clock, 
 				double external_input)
+				
 : excitatory_neuron_(excitatory_neuron),
   V_membrane_ (V_membrane),
   nb_spikes_(nb_spikes), 
@@ -161,11 +162,11 @@ void Neuron::updateTargets()
 	}
 }
 
-void Neuron::update(int dt)
+void Neuron::update(int dt, double noise)
 {	
 	spike_ = false; //by default, we don't have any spike
 	double sum_amplitudes(0.0); //contains all the amplitude of the arriving spike of excitatory and inhibitory neurons and from the random spiking external neurons
-	sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + randomSpikes();
+	sum_amplitudes = getTimeBuffer((neuron_clock_)%(D+1)) + noise;
 
 	
 	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold

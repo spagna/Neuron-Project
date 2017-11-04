@@ -286,10 +286,14 @@ public:
 	 * and so the neruon would spike, it could be in his refractory period if a spike occured 
 	 * in less than 2 milliseconds or neither of them and so the neuron would just update it's
 	 * membrane potential depending on the external input received and the amplitudes stored in its time buffer.
+	 * When a neuron is updated, he has to receive the amplitudes of the noise in parameters. This also
+	 * allows futher simulations or tests
 	 * 
+	 * @param noise : a double indicating the random amplitudes recevied by the exterior 
 	 * @param dt : an integer indicating the time step. Every time step the neuron has to be checked and updated.
+	 * 
 	 */
-	void update(int dt); //at every time step, the neuron controle if he received an input or not and updates 	
+	void update(int dt, double noise); //at every time step, the neuron controle if he received an input or not and updates 	
 
 
 	/*!

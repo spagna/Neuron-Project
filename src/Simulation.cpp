@@ -40,7 +40,7 @@ void Simulation::networkSimulation()
 		
 		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
 			assert (neurons[i] != nullptr);
-			neurons[i]->update(N);
+			neurons[i]->update(N, neurons[i]->randomSpikes());
 			if (neurons[i]->getSpikeState()){
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
 			}
