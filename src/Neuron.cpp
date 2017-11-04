@@ -1,5 +1,6 @@
 #include "Neuron.hpp"
 #include <iostream>
+#include <random>
 
 
 Neuron::Neuron (bool excitatory_neuron, 

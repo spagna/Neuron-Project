@@ -7,37 +7,47 @@
 #include <array>
 #include <vector>
 #include <cassert> 
-#include <random>
 
 
-//here times are transformed in steps of simulation, to make comparisons more accurate
-//to have the exact value in milliseconds, it has to be multiplied by h 
+/**********************************************************************************************//**
+ * The following consants represent all the constant needed in the simulation;
+ * there are time constant for start and end, time constatns,
+ * membrane potential constatns, step constant, the delay, the total number of neurons
+ * and of the two different groups of neurons, the number of connections, 
+ * the amplitude of excitatory/inhibitory spikes and the number needed for the poisson generator
+ * NB: most of the constants are in terms of time step to make the simulation easier and
+ * to avoid errors given by floating errors of double numbers. 
+ * To have the constant in terms of time step, the values in milliseconds has been multiplied by h.
+ *************************************************************************************************/
+
 constexpr int t_start (0);//!< step the simulation starts (0.0 milliseconds)
 constexpr int t_stop (5000); //!< step the simulation stops (500.0 milliseconds)
-constexpr int n_clock_start (1000); //!<neuron clock starts at step 1000 (at 100.0 in milliseconds) 
-constexpr int n_clock_stop (4000); //!< neuron clock stops at step 4000 (at 400.0 in milliseconds) 
+
+
 constexpr int tau (200); //!< time constant in terms of time steps (20.0 in milliseconds) (note tau = R/C)
+constexpr int tau_rp (20); //!< time constat for the refractory period in terms of time steps (2.0 in milliseconds) 
 
 constexpr double V_thr (20.0); //!< firing threshold in microvolts 
 constexpr double V_refractory (0.0); //!< refractory membrane potential in microvolts
-constexpr int tau_rp (20); //!< refractory period in terms of time steps (2.0 in milliseconds) 
 
 constexpr double h (0.1); //!< equidistant step of time during which the simulation evolves (in milliseconds)
 constexpr int N(1); //!< step of simulations 
-constexpr int D(15); //!< delay: time steps needed before the post-synpatic neuron receives a spike (1.0 in milliseconds)
-constexpr double J(0.1); //!< amplitude of the signal in microvolts
 
 constexpr unsigned int C (1); //!< number of connections from other neurons
 constexpr double R (20.0); //!< /membrane resistance
 constexpr double const1 (exp(-h/(tau*h))); //!< constant 1 of the membrane equation
 constexpr double const2 (R*(1 - const1)); //!< constante 2 of the membrane equation
 
+constexpr int D(15); //!< delay: time steps needed before the post-synpatic neuron receives a spike (1.0 in milliseconds)
+
 constexpr int total_neurons (12500); //!< total number of neurons in the network
 constexpr int excitatory_neurons (10000); //!< number of excitatory neurons
 constexpr int inhibitory_neurons (2500); //!< number of inhibitory neurons
+
 constexpr int c_e (1000); //!< connections received from excitatory neurons
 constexpr int c_i (250); //!< connections received from inhibitory neurons
 constexpr int c_ext (c_e); //!< connections received from the rest of the brain 
+
 constexpr double J_e (0.1); //!< amplitude of the signal from an excitatory neuron
 constexpr double J_i (0.5); //!< /amplitude of the signal from an inhibitory neuron
 
@@ -289,7 +299,7 @@ public:
 	 * @param dt : an integer indicating the time the spike has occured and has to be stored in temrs of time step
 	 * @details The parameter corresponds to the local time of the neuron.
 	 */
-	void updateNeuronState (int dt); //if the potential cross the threshold, this function update all the attributes of the neuron	
+	void updateNeuronState (int dt); 
 	/*!
 	 * @brief Update the neuron's target (their parameters) when the neuron spikes
 	 * @details When a neuron spikes, the time buffer of the target neurons has to be filled with the
@@ -297,7 +307,7 @@ public:
 	 * The case filled based on the local time of the spiking neuron and the delay of reception.
 	 * 		  
 	 */
-	void updateTargets(); //if there is a spike, the buffers of all the targets of the neuron have to be filled with the corrisponding amplitude of the spike
+	void updateTargets(); 
 	/*!
 	 * @brief Update the neuron depending on its situation.
 	 * @details A neuron has three possible situations: it's membrane potential could cross the threshold
