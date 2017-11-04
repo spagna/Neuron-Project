@@ -11,7 +11,7 @@ include_directories(${gtest_SOURCE_DIR}/include${gtest_SOURCE_DIR})
 # Finds .h/.hpp files
 include_directories("${INCLUDE_DIRECTORY}")
 
-add_executable (${PROJECT_NAME} src/Neuron.cpp src/main.cpp)
+add_executable (${PROJECT_NAME} src/Neuron.cpp src/main.cpp src/Simulation.cpp)
 add_executable(Neuron_unittest src/Neuron.cpp src/Neuron_unittest.cpp)
 
 target_link_libraries(Neuron_unittest gtest gtest_main)
