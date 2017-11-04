@@ -4,8 +4,11 @@
 #include <cmath>
 #include <cassert>
 
-//TEST1: Test if the current membrane potential coincide with the equation if the external
-//////// input during the time interval [a,b] is 1.0 (so no spikes)
+
+/*
+ * TEST1: Test if the membrane potential of the neuron is coeherent with the membrane equation.
+ * The used external input is positive, thus the membrane potential has to be positive too.
+*/
 
 TEST (NeuronTest, PositiveMembranePotential){
 	Neuron neuron(true);
@@ -16,8 +19,11 @@ TEST (NeuronTest, PositiveMembranePotential){
 	
 }
 
-//TEST2: Test if the current membrane potential coincide with the equation if the external
-//////// input during the time interval [a.b] is -1.0 (so no spikes)
+/*
+ * TEST1: Test if the membrane potential of the neuron is coeherent with the membrane equation.
+ * The used external input is negative, thus the membrane potential has to be negative too.
+*/
+
 TEST (NeuronTest, NegativeMembranePotential){
 	Neuron neuron(true);
 	neuron.setExternalInput(-1.0); //negatif input given
@@ -26,8 +32,12 @@ TEST (NeuronTest, NegativeMembranePotential){
 	EXPECT_NEAR(-20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001); 
 }
 
-//TEST3: Test if the current membrane potential coincide with the equation if the extenral 
-/////// input is 0.0 in the time interval [a,b] too
+/*
+ * TEST3: Test if the membrane potential of the neuron is coeherent with the membrane equation.
+ * The used external input null, thus the membrane pontential shouldn't increase if no noises 
+ * are added.
+*/
+
 TEST (NeuronTest, NulMembranePotential){
 	Neuron neuron (true);
 	neuron.setExternalInput (0.0); //no input is received by the neuron
@@ -36,9 +46,11 @@ TEST (NeuronTest, NulMembranePotential){
 }
 
 
+/*
+ * TEST4: Test if the time of the first spike is 92.4 milliseconds for an external input of 1.01
+ * as we expect
+*/
 
-//TEST4: Test if the time of the first spike (whick is 92.4 for an external input of 1.01)
-/////// is the same as we expect
 TEST (NeuronTest, SpikeTimes){
 	Neuron neuron (true); 
 	neuron.setExternalInput(1.01); //the external input is setted to 1.01 so that the neuron will cross the threshold
@@ -53,8 +65,9 @@ TEST (NeuronTest, SpikeTimes){
 	EXPECT_EQ (92.4, neuron.getTimeSpike());
 	EXPECT_NEAR (neuron.getV_membrane(), 0.0, 0.001); //check if neuron enters its refractory period
 }
-
-//TEST4:Test if the post-synaptic neuron receives the spike with the correct delay
+/*
+ * TEST5: Test if the post-synaptic neuron receives the spike with the correct delay
+*/
 TEST (NeuronTest, Delay){
 	Neuron neuron1(true); //the spiking neuron is an excitatory neuron: the amplitude of its signal is 0.1
 	Neuron neuron2(true);
@@ -78,6 +91,20 @@ TEST (NeuronTest, Delay){
 		}
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.1, 0.001); //check if neuron2 receives the spike
 }
+
+/*
+ * TEST5: Test if every neuron receives exactly 1000 excitatory connections and 250 inhibitory connections 
+*/
+TEST (NeuronTest, Connections){
+	std::array <Neuron*, 12500> neurons; //network
+	//add the connections between every neuron
+	for (auto n: neurons){
+		n->addConnections(neurons);
+		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
+		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections
+	}
+}
+	
 
 
 
