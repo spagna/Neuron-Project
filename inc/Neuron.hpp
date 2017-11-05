@@ -51,8 +51,8 @@ constexpr int c_ext (c_e); //!< connections received from the rest of the brain
 constexpr double J_e (0.1); //!< amplitude of the signal from an excitatory neuron
 constexpr double J_i (0.5); //!< /amplitude of the signal from an inhibitory neuron
 
-constexpr double v_ext (0.02); //!< rate at which every neuron receives additional random input from the rest of the brain
-constexpr double poisson_gen(v_ext*c_e*h); //!< rate of possion generator 
+constexpr double nu_ext (20); //!< mean of the number of spikes in the network (spikes par milliseconds)
+constexpr double poisson_gen(nu_ext*h); //!< rate at which every neuron receives additional random input from the rest of the brain
 
 /*!
      * @class Neuron

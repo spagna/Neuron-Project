@@ -251,7 +251,7 @@ double Neuron::randomSpikes() const
 {
 	static std::random_device rd; //algorithme for generating random numbers
 	static std::mt19937 gen(rd()); //algorithme for generating random numbers
-	static std::poisson_distribution<> dis_ext (c_e*v_ext*h); //rate at which the target of the external connections receive spikes
+	static std::poisson_distribution<> dis_ext (poisson_gen); //rate at which the target of the external connections receive spikes
 	return J_e*dis_ext(gen); //amplitudes of the random generated spikes
 }
 			

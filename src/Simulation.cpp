@@ -92,6 +92,7 @@ void Simulation::networkSimulation()
 	for (size_t i(0); i<neurons.size(); ++i){ 
 		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
 	}
+	//system ("python Graphs.py");
 	for (auto& n : neurons){ //at the end of the simulation the memory has to be desallocated
 		n = nullptr;
 		delete n;
