@@ -48,13 +48,19 @@ public:
      * There is a file that stores all the time a neuron spikes and its index. This will allow creating the 4 graphs of the
      * brunel's network.
      * 
+     * @param g :  an integer indicating the rate between inhibitory connections and excitatory connections 
+     * @param pois : an integer indicating the rate between inhibitory connections and excitatory connections 
+     * 
      * 
      */
-	void networkSimulation();
+	void networkSimulation(int g, int pois);
+	
+	void plotGraph_A();
+	
 	
 	
 	/*!
-     * @brief Destructor of the Simulation class
+     * @brief Destructor of the class Simulation 
      */
 	~Simulation();
 

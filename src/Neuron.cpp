@@ -170,7 +170,7 @@ void Neuron::updateNeuronState (int dt)
 	r_period_= true; //the refractory period becomes as soon as a spike occurs
 }
 
-void Neuron::updateTargets()
+void Neuron::updateTargets(int g)
 {
 	for (auto const& n: n_target_){
 		assert(n != nullptr); //control that the targents aren't nullptr
@@ -181,19 +181,19 @@ void Neuron::updateTargets()
 		} else {
 			// the time buffer is fulled with a certain J from 
 			// an inhibitory neuron at a certain time step delay
-			n->addTimeBuffer((neuron_clock_+D)%(D+1), -J_i);
+			n->addTimeBuffer((neuron_clock_+D)%(D+1), -g*J_e);
 		}
 	}
 }
 
-void Neuron::update(int dt, double noise)
+void Neuron::update(int dt, double noise, int g)
 {	
 	//the value has to be setted at false at the beginning of every update until a spike occurs
 	spike_ = false; 
 	
 	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold
 		updateNeuronState(neuron_clock_); //some parameters of the neuron have to be updated
-		updateTargets(); //the targets have to be updated 
+		updateTargets(g); //the targets have to be updated 
 	} 
 	//the neuron is in its refractory period if the distance in time between the last spike
 	// and the current neuron is less than tau, a constant
@@ -247,11 +247,11 @@ void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 	}
 }
 
-double Neuron::randomSpikes() const
+double Neuron::randomSpikes(int pois) const
 {
 	static std::random_device rd; //algorithme for generating random numbers
 	static std::mt19937 gen(rd()); //algorithme for generating random numbers
-	static std::poisson_distribution<> dis_ext (poisson_gen); //rate at which the target of the external connections receive spikes
+	static std::poisson_distribution<> dis_ext (pois); //rate at which the target of the external connections receive spikes
 	return J_e*dis_ext(gen); //amplitudes of the random generated spikes
 }
 			

@@ -17,7 +17,7 @@ int main(int argc, char**argv){
 TEST (NeuronTest, PositiveMembranePotential){
 	Neuron neuron(true);
 	neuron.setExternalInput(1.0); //positif input given
-	neuron.update(1, 0.0); //one update without noises
+	neuron.update(1, 0.0, 5); //one update without noises
 	//check if the membrane potential increases in positif according to the membrane equation
 	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);
 	
@@ -31,7 +31,7 @@ TEST (NeuronTest, PositiveMembranePotential){
 TEST (NeuronTest, NegativeMembranePotential){
 	Neuron neuron(true);
 	neuron.setExternalInput(-1.0); //negatif input given
-	neuron.update(1, 0.0); //one update without noises
+	neuron.update(1, 0.0, 5);//one update without noises
 	//check if the membrane potential decreases in negatif according to the membrane equation
 	EXPECT_NEAR(-20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001); 
 }
@@ -45,7 +45,7 @@ TEST (NeuronTest, NegativeMembranePotential){
 TEST (NeuronTest, NulMembranePotential){
 	Neuron neuron (true);
 	neuron.setExternalInput (0.0); //no input is received by the neuron
-	neuron.update(1, 0.0); //no noise received
+	neuron.update(1, 0.0, 5); //no noise received
 	EXPECT_NEAR(0.0, neuron.getV_membrane(), 0.001); //check if there is no changes in the membrane potential
 }
 
@@ -60,10 +60,10 @@ TEST (NeuronTest, SpikeTimes){
 	neuron.setExternalInput(1.01); //the external input is setted to 1.01 so that the neuron will cross the threshold
 	//neuron is update until one step before it spikes
 	do {
-		neuron.update(1, 0.0);
+		neuron.update(1, 0.0, 5);
 	} while (neuron.getNeuronClock() < 924);
 	EXPECT_NEAR (neuron.getV_membrane(), 20.0, 0.001); //check if neuron is ready to spike
-	neuron.update(1, 0.0); //neuron spikes
+	neuron.update(1, 0.0, 5); //neuron spikes
 	 //check if the values of the time of the last spikes is the same as the values written in the 
 	 //terminal during the simulation
 	EXPECT_EQ (92.4, neuron.getTimeSpike());
@@ -80,18 +80,18 @@ TEST (NeuronTest, Delay){
 	
 	//the neurons are updated unitl one step before neuron1 spikes
 	do {
-		neuron1.update(1, 0.0); 
-		neuron2.update(1, 0.0); 	
+		neuron1.update(1, 0.0, 5); 
+		neuron2.update(1, 0.0, 5); 	
 	} while (neuron1.getNeuronClock() < 924);
 	EXPECT_NEAR (neuron1.getV_membrane(), 20.0, 0.001); //chekc if neuron1 is ready to spike
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001); //check if neuron2 doesn't receive any stimuli
-	neuron1.update(1, 0.0); //neuron1 spikes
-	neuron2.update(1, 0.0);
+	neuron1.update(1, 0.0, 5); //neuron1 spikes
+	neuron2.update(1, 0.0, 5);
 	EXPECT_NEAR (neuron1.getV_membrane(), 0.0, 0.001); //check if neuron1 goes in its refractory period
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001); //check if neuron2 doesn't spike
 	//neuron2 is update until the delay ends
 	for (int i(0); i<=D; ++i){ 
-		neuron2.update(1, 0.0); //after D time steps neuron2 should receives the spike
+		neuron2.update(1, 0.0, 5); //after D time steps neuron2 should receives the spike
 		}
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.1, 0.001); //check if neuron2 receives the spike
 }
@@ -141,16 +141,15 @@ TEST (NeuronTest, Connections){
 TEST (NeuronTest, RefractoryPeriod){
 	Neuron neuron(true);
 	neuron.setExternalInput(1.01);
-	double noise = neuron.randomSpikes();
 	do { //update the neuron until it spikes
-		neuron.update(1, 0.0);
+		neuron.update(1, 0.0, 5);
 	} while (neuron.getNeuronClock() < 925);
 	for (int i(0); i<tau_rp; ++i){ //for 2.0 milliseconds the neuron has to stay in its refractory period
 		EXPECT_NEAR (0.0, neuron.getV_membrane(), 0.001); //check if the membrane potential is 0.0 
-		neuron.update(1, noise);
+		neuron.update(1, 0.0, 5);
 	}
 	//check if after the refractory period the membrane potential starts increasing again
-	EXPECT_NEAR(noise + 20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
+	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
 }
 
 

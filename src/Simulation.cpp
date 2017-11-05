@@ -21,7 +21,7 @@ void Simulation::oneNeuronSimulation()
 	n.setExternalInput(input);
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do { //update all the neurons of the simulation
-		n.update(1, 0.0); //no noise is added at the update function for one neuron simulation
+		n.update(1, 0.0, 5); //no noise is added at the update function for one neuron simulation
 		if (n.getSpikeState()){ //write in the terminal the time of the spike
 			std::cout << "A spike occured at time: " << simulation_time*h << std::endl;
 		}
@@ -42,12 +42,12 @@ void Simulation::twoNeruonsSimulation()
 	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do { //update all the neurons of the simulation
-		neuron1.update(1, 0.0); //no noise is added at the update function for one neuron simulation
+		neuron1.update(1, 0.0, 5); //no noise is added at the update function for one neuron simulation
 		if (neuron2.getTimeBuffer((simulation_time)%(D+1)) != 0){ //read if there is an amplitude in the time buffer
 			//if an amplitude is present, the time the neurons receives the spike is written in the terminal
 			std::cout << "The spike is received at time: " << simulation_time*h << std::endl;
 		}
-		neuron2.update(1, 0.0);
+		neuron2.update(1, 0.0, 5);
 		if (neuron1.getSpikeState()){ //write in the terminal the time of the spike
 			std::cout << "A spike occured at time: " << simulation_time*h << std::endl;
 		}
@@ -56,7 +56,7 @@ void Simulation::twoNeruonsSimulation()
 	
 }
 	
-void Simulation::networkSimulation()
+void Simulation::networkSimulation(int g, int pois)
 {
 	std::ofstream file2; //open a file to store the time of all the spikes of all neurons
 	file2.open("Spike_time.txt");
@@ -83,7 +83,7 @@ void Simulation::networkSimulation()
 	do {
 		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
 			assert (neurons[i] != nullptr); //check always that the neurons are nullptr
-			neurons[i]->update(N, neurons[i]->randomSpikes());  //update with the noise given by random spikes
+			neurons[i]->update(N, neurons[i]->randomSpikes(pois), g);  //update with the noise given by random spikes
 			if (neurons[i]->getSpikeState()){ //when a neuron spikes, write down the time and the index of the neuron
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
 			}
@@ -101,6 +101,10 @@ void Simulation::networkSimulation()
 		delete n;
 	}
 }
+
+void Simulation::plotGraph_A()
+{}
+	
 
 Simulation::~Simulation()
 {}
