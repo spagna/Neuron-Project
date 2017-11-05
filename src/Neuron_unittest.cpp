@@ -118,11 +118,32 @@ TEST (NeuronTest, Connections){
 		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
 		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections 
 	}
-	for (auto& n:neurons){
+	for (auto& n:neurons){ //clear the memory
 		n = nullptr;
 		delete n;
 	}
 }
+
+/*
+ * TEST6: Test if the neuron respects its refractory period even 
+ * if an external input and noises are applied during the refractory period (after the spike)s
+*/
+
+TEST (NeuronTest, RefractoryPeriod){
+	Neuron neuron(true);
+	neuron.setExternalInput(1.01);
+	double noise = neuron.randomSpikes();
+	do { //update the neuron until it spikes
+		neuron.update(1, 0.0);
+	} while (neuron.getNeuronClock() < 925);
+	for (int i(0); i<tau_rp; ++i){ //for 2.0 milliseconds the neuron has to stay in its refractory period
+		EXPECT_NEAR (0.0, neuron.getV_membrane(), 0.001); //check if the membrane potential is 0.0 
+		neuron.update(1, noise);
+	}
+	//check if after the refractory period the membrane potential starts increasing again
+	EXPECT_NEAR(noise + 20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
+}
+	
 
 
 	
