@@ -56,7 +56,7 @@ void Simulation::twoNeruonsSimulation()
 	
 }
 	
-void Simulation::networkSimulation(int g, int pois)
+void Simulation::networkSimulation(double g, double pois)
 {
 	std::ofstream file2; //open a file to store the time of all the spikes of all neurons
 	file2.open("Spike_time.txt");
@@ -103,7 +103,32 @@ void Simulation::networkSimulation(int g, int pois)
 }
 
 void Simulation::plotGraph_A()
-{}
+{
+	networkSimulation(3,2);
+	/*std::string name ("python ../Graphs.py &");
+	system (name.c_str());*/
+}
+
+void Simulation::plotGraph_B()
+{
+	networkSimulation(6,4);
+	/*std::string name ("python ../Graphs.py &");
+	system (name.c_str());*/
+}
+
+void Simulation::plotGraph_C()
+{
+	networkSimulation(5,2);
+	/*std::string name ("python ../Graphs.py &");
+	system (name.c_str());*/
+}
+
+void Simulation::plotGraph_D()
+{
+	networkSimulation(4.5, 0.9);
+	/*std::string name ("python ../Graphs.py &");
+	system (name.c_str());*/	
+}
 	
 
 Simulation::~Simulation()

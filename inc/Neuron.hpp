@@ -314,9 +314,9 @@ public:
 	 * amplitude of the singal sended by the spiking neuron, depending on the role of the neuron. 
 	 * The case filled based on the local time of the spiking neuron and the delay of reception.
 	 * 	
-	 *	@param g : an integer indicating the rate between inhibitory connections and excitatory connections  
+	 *	@param g : a double indicating the rate between inhibitory connections and excitatory connections  
 	 */
-	void updateTargets(int g); 
+	void updateTargets(double g); 
 	/*!
 	 * @brief Update the neuron depending on its situation.
 	 * @details A neuron has three possible situations: it's membrane potential could cross the threshold
@@ -328,10 +328,10 @@ public:
 	 * 
 	 * @param dt : an integer indicating the time step. Every time step the neuron has to be checked and updated.
 	 * @param noise : a double indicating the random amplitudes recevied by the exterior 
-	 * @param g : an integer indicating the the rate J_i/J_e
+	 * @param g : a double indicating the the rate J_i/J_e
 	 * 
 	 */
-	void update(int dt, double noise, int g); 	
+	void update(int dt, double noise, double g); 	
 
 
 	/*!

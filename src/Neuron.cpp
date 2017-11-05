@@ -170,7 +170,7 @@ void Neuron::updateNeuronState (int dt)
 	r_period_= true; //the refractory period becomes as soon as a spike occurs
 }
 
-void Neuron::updateTargets(int g)
+void Neuron::updateTargets(double g)
 {
 	for (auto const& n: n_target_){
 		assert(n != nullptr); //control that the targents aren't nullptr
@@ -186,7 +186,7 @@ void Neuron::updateTargets(int g)
 	}
 }
 
-void Neuron::update(int dt, double noise, int g)
+void Neuron::update(int dt, double noise, double g)
 {	
 	//the value has to be setted at false at the beginning of every update until a spike occurs
 	spike_ = false; 
