@@ -55,15 +55,38 @@ public:
      */
 	void networkSimulation(double g, double pois);
 	
+	/*!
+     * @brief Plot the graph A of the brunel's model
+     * @details This function plots with python the graph A of the brunel's model.
+     * The graph depends on two ratio: the g ratio and nu_ext over nu_threshold. In this
+     * case the first one is 3 and the second one is 2, so the negative amplitude will be 0.3 and 2 will be the 
+     * central value of the poisson curbe
+     */
 	void plotGraph_A();
+	/*!
+     * @brief Plot the graph B of the brunel's model
+     * @details This function plots with python the graph B of the brunel's model.
+     * The graph depends on two ratio: the g ratio and nu_ext over nu_threshold. In this
+     * case the first one is 6 and the second one is 4, so the negative amplitude will be 0.4 and 2 will be the 
+     * central value of the poisson curbe.
+     */
 	void plotGraph_B();
+	/*!
+     * @brief Plot the graph C of the brunel model
+     * @details This function plots with python the graph C of the brunel's model.
+     * The graph depends on two ratio: the g ratio and nu_ext over nu_threshold. In this
+     * case the first one is 3 and the second one is 2, so the negative amplitude will be 0.6 and 2 will be the 
+     * central value of the poisson curbe
+     */
 	void plotGraph_C();
+	/*!
+     * @brief Plot the graph D of the brunel model
+     * @details This function plots with python the graph D of the brunel's model.
+     * The graph depends on two ratio: the g ratio and nu_ext over nu_threshold. In this
+     * case the first one is 4.5 and the second one is 0.9, so the negative amplitude will be 0.45 and 0.9 will be the 
+     * central value of the poisson curbe.
+     */
 	void plotGraph_D();
-	
-	
-	
-	
-	
 	/*!
      * @brief Destructor of the class Simulation 
      */
