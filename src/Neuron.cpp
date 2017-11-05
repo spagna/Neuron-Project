@@ -247,7 +247,7 @@ void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 	}
 }
 
-double Neuron::randomSpikes(int pois) const
+double Neuron::randomSpikes(double pois) const
 {
 	static std::random_device rd; //algorithme for generating random numbers
 	static std::mt19937 gen(rd()); //algorithme for generating random numbers

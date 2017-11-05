@@ -90,7 +90,7 @@ TEST (NeuronTest, Delay){
 	EXPECT_NEAR (neuron1.getV_membrane(), 0.0, 0.001); //check if neuron1 goes in its refractory period
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001); //check if neuron2 doesn't spike
 	//neuron2 is update until the delay ends
-	for (int i(0); i<=D; ++i){ 
+	for (int i(0); i<D; ++i){ 
 		neuron2.update(1, 0.0, 5); //after D time steps neuron2 should receives the spike
 		}
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.1, 0.001); //check if neuron2 receives the spike
@@ -151,7 +151,29 @@ TEST (NeuronTest, RefractoryPeriod){
 	//check if after the refractory period the membrane potential starts increasing again
 	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
 }
-
+/*
+ * TEST7: Test that the amplitude received by an inhibitory neuron gives a negative membrane potential
+ * after the correct delay.
+*/
+TEST (NeuronTest, Inhibitory){
+	Neuron n1 (false); //inhibitory neuron
+	Neuron n2 (true); //target of the inhibitory neuron
+	n1.setExternalInput(1.01);
+	n1.addTargetNeuron(&n2);
+	//update until n1 is ready to spike
+	do {
+		n1.update(1, 0.0, 5);
+		n2.update(1, 0.0, 5);
+	} while (n1.getNeuronClock() < 924);
+	n1.update(1, 0.0, 5); //n1 spikes
+	n2.update(1, 0.0, 5);
+	//after the correct delay n2 receives the signal
+	for (int i(0); i<D; ++i){ 
+		n2.update(1, 0.0, 5);
+	}
+	//check if the membrane potential of an amplitude of -5 (g=5) is negative when the spikes is received
+	EXPECT_NEAR (-0.5, n2.getV_membrane(), 0.001);
+}
 
 
 	
