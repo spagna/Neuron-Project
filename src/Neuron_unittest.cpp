@@ -118,6 +118,15 @@ TEST (NeuronTest, Connections){
 		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
 		EXPECT_EQ (n->getInhibitoryConnections(), 250); //check the number of inhibitory connections 
 	}
+	int j(0);
+	//this is another way to test the number of connections: instead of counting the connections added
+	//to each neuron, the sizes of the vector of targets are summed up and has to give the total
+	//number of connections present in the whole network
+	for (auto const& n: neurons){
+		j += n->getTargets().size();
+	}
+	EXPECT_EQ (12500*1250, j);
+		
 	for (auto& n:neurons){ //clear the memory
 		n = nullptr;
 		delete n;
@@ -143,7 +152,7 @@ TEST (NeuronTest, RefractoryPeriod){
 	//check if after the refractory period the membrane potential starts increasing again
 	EXPECT_NEAR(noise + 20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
 }
-	
+
 
 
 	
