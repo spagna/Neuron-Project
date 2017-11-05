@@ -166,6 +166,13 @@ public:
 	 */
 	Neuron* getTargetNeuron (int i) const;
 	/*!
+	 * @brief Get the whole vector of targets
+	 *
+	 * @return A vector n_target_: vector of pointers on target's neuron
+	 */
+	std::vector <Neuron*> getTargets() const;
+	
+	/*!
 	 * @brief Get the role of the neuron.
 	 * @details If the boolean is true, the neuron is an excitatory neuron, 
 	 * if false it's an inhibitory neuron.

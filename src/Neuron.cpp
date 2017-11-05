@@ -69,6 +69,11 @@ Neuron* Neuron::getTargetNeuron(int i) const
 	return n_target_[i];
 }
 
+std::vector<Neuron*> Neuron::getTargets() const
+{
+	return n_target_;
+}
+
 bool Neuron::getExcitatoryNeuron() const
 {
 	return excitatory_neuron_;
