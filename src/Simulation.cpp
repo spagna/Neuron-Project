@@ -4,6 +4,7 @@
 #include <fstream>
 #include <array>
 #include <vector>
+#include <string>
 
 
 Simulation::Simulation()
@@ -92,7 +93,9 @@ void Simulation::networkSimulation()
 	for (size_t i(0); i<neurons.size(); ++i){ 
 		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
 	}
-	//system ("python Graphs.py");
+	//open the python script
+	/*std::string name ("python ../Graphs.py &");
+	system (name.c_str());*/
 	for (auto& n : neurons){ //at the end of the simulation the memory has to be desallocated
 		n = nullptr;
 		delete n;
