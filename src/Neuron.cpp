@@ -18,8 +18,8 @@ Neuron::Neuron (bool excitatory_neuron,
   external_input_(external_input),
   r_period_(r_period)
 {
-	//each box of the buffer is setted to zero at the beginnin
-	for (size_t i(0); i<t_buffer_.size(); ++i){ //each box of the buffer is setted to zero at the beginnin
+	//each box of the buffer is setted to zero at the beginning
+	for (size_t i(0); i<t_buffer_.size(); ++i){ 
 		t_buffer_[i] = 0.0;
 	}
 } 
@@ -164,23 +164,21 @@ void Neuron::addTargetNeuron(Neuron* n)
 
 void Neuron::updateNeuronState (int dt)
 {
-	t_spike_ = dt*h;//store the time of the spike 
-	++nb_spikes_; //the number of spike increases of one
-	spike_ = true; //the spike has occured
-	r_period_= true; //the refractory period becomes as soon as a spike occurs
+	t_spike_ = dt*h; //store the time of the spike in milliseconds
+	++nb_spikes_; 
+	spike_ = true; 
+	r_period_= true; 
 }
 
 void Neuron::updateTargets(double g)
 {
 	for (auto const& n: n_target_){
-		assert(n != nullptr); //control that the targents aren't nullptr
+		assert(n != nullptr); //controls that the targets aren't nullptr
+		// the time buffer is filled with amplitudes of excitatory or inhibitory neurons
+		// the modulo allows a correct insertion of the values in a table of fixed  size
 		if (excitatory_neuron_){
-			// the time buffer is fulled with a certain J from 
-			// an excitatory neuron at a certain time step delay
 			n->addTimeBuffer((neuron_clock_+D)%(D+1), J_e);
 		} else {
-			// the time buffer is fulled with a certain J from 
-			// an inhibitory neuron at a certain time step delay
 			n->addTimeBuffer((neuron_clock_+D)%(D+1), -g*J_e);
 		}
 	}
@@ -190,27 +188,23 @@ void Neuron::update(int dt, double noise, double g)
 {	
 	//the value has to be setted at false at the beginning of every update until a spike occurs
 	spike_ = false; 
-	
-	if (V_membrane_ > V_thr){ // if the membrane potential crosses the threshold
-		updateNeuronState(neuron_clock_); //some parameters of the neuron have to be updated
-		updateTargets(g); //the targets have to be updated 
+	// if the membrane potential crosses the threshold, the current neuron and its targets are updated
+	if (V_membrane_ > V_thr){ 
+		updateNeuronState(neuron_clock_); 
+		updateTargets(g); 
 	} 
 	//the neuron is in its refractory period if the distance in time between the last spike
-	// and the current neuron is less than tau, a constant
+	// and the current neuron is less than tau, a constant, and just if a spike just occured
 	if (r_period_ and tau_rp > neuron_clock_ - t_spike_/h){ 
-		V_membrane_ = V_refractory; //the membrane potential is zero
-	//if the neuron doesn't spike nor stay in a refractory state, the membrane potential has to be updated
+		V_membrane_ = V_refractory; 
+	//if the neuron doesn't spike and it isn't in a refractory state, the membrane potential has to be updated
 	} else {
-		r_period_ = false; //the neuron isn't in its refractory period
-		//the membrane potential increases and that depends on three parameters:
-		//the external input, the amplitude stored in the time buffer and the random spikes
-		//and their relative amplitudes coming from the exterior
+		r_period_ = false; 
 		solveMembraneEquation(external_input_, getTimeBuffer((neuron_clock_)%(D+1)), noise); 
 	}
-	//the box of the current time in the ring buffer has to be resetted to 0 after each update
-	// to allow the next spikes to be stored
+	//the box is resetted to 0 after each update to allow the next spikes to be stored
 	setTimeBuffer(neuron_clock_%(D+1), 0.0); 
-	neuron_clock_ += dt;	//the simulation advanced of a step dt
+	neuron_clock_ += dt;	
 }
 
 void Neuron::solveMembraneEquation(double input, double ampl, double random)
@@ -221,38 +215,44 @@ void Neuron::solveMembraneEquation(double input, double ampl, double random)
 
 void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 {
-	std::random_device rd; //algorithme for generating random numbers
-	std::mt19937 gen(rd()); //algorithme for generating random numbers
+	//algorithmes for generating random numbers
+	std::random_device rd; 
+	std::mt19937 gen(rd()); 
 	
-	//distribution of random integer number to determine which excitatory neuron 
-	//is connected to the current neuron. The values vary between 0 and 999.
-	//Those values correponds to the index of excitatory neurons in the array of neurons
+	//distribution of random integer numbers to determine which excitatory neuron 
+	//is connected to the current neuron. 
+	//Those values correpond to an index of an excitatory neuron in the array of neurons
 	std::uniform_int_distribution<> dis_e (0, excitatory_neurons-1); 
 	
-	
-	for (int i(0); i<c_e; ++i){ //for every excitatory connections that a neuron can receive
-		//the neuron randomly chosen add the current neuron as target
+	//the excitatory neuron randomly chosen adds the current neuron as target
+	for (int i(0); i<c_e; ++i){ 
 		neurons[dis_e(gen)]->addTargetNeuron(this); 
-		++nb_excitatory_connections_; //take the count of the excitatory connections received by a neuron
+		//takes the count of the excitatory connections received by a neuron
+		++nb_excitatory_connections_; 
 	}
 	
-	//distribution of random integer number to determine which inhibitory neuron 
-	//is connected to the current neuron. The values vary between 0 and 249.
-	//Those values correponds to the index of excitatory neurons in the array of neurons
+	//distribution of random integer numbers to determine which inhibitory neuron 
+	//is connected to the current neuron. 
+	//Those values correpond to an index of an inhibitory neuron in the array of neurons
 	std::uniform_int_distribution<> dis_i (0, inhibitory_neurons-1);
-	for (int i(0); i<c_i; ++i){//for every inhibitory connections that a neuron can receive,
-		//the neuron randomly chosen add the current neuron as target
+
+	//the inhibitory neuron randomly chosen adds the current neuron as target
+	for (int i(0); i<c_i; ++i){
 		neurons[excitatory_neurons+dis_i(gen)]->addTargetNeuron(this);
-		++ nb_inhibitory_connections_;//take the count of the inhibitory connections received by a neuron
+		//take the count of the inhibitory connections received by a neuron
+		++ nb_inhibitory_connections_;
 	}
 }
 
 double Neuron::randomSpikes(double pois) const
 {
-	static std::random_device rd; //algorithme for generating random numbers
-	static std::mt19937 gen(rd()); //algorithme for generating random numbers
-	static std::poisson_distribution<> dis_ext (pois); //rate at which the target of the external connections receive spikes
-	return J_e*dis_ext(gen); //amplitudes of the random generated spikes
+	//algorithmes for generating random numbers
+	static std::random_device rd; 
+	static std::mt19937 gen(rd()); 
+	//decides how many random spikes from external connections a neuron will receive 
+	static std::poisson_distribution<> dis_ext (pois);
+	//return the amplitudes of the random generated spike
+	return J_e*dis_ext(gen);
 }
 			
 Neuron::~Neuron()
