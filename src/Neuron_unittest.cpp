@@ -5,6 +5,8 @@
 #include <cassert>
 
 
+//Run all the tests of gtest
+
 int main(int argc, char**argv){
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
@@ -16,7 +18,7 @@ int main(int argc, char**argv){
 
 TEST (NeuronTest, PositiveMembranePotential){
 	Neuron neuron(true);
-	neuron.setExternalInput(1.0); //positif input given
+	neuron.setExternalInput(1.0); //positive input given
 	neuron.update(1, 0.0, 5); //one update without noises
 	//check if the membrane potential increases in positif according to the membrane equation
 	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);
@@ -24,43 +26,40 @@ TEST (NeuronTest, PositiveMembranePotential){
 }
 
 /*
- * TEST1: Test if the membrane potential of the neuron is coeherent with the membrane equation.
+ * TEST2: Test if the membrane potential of the neuron is coeherent with the membrane equation.
  * The used external input is negative, thus the membrane potential has to be negative too.
 */
 
 TEST (NeuronTest, NegativeMembranePotential){
 	Neuron neuron(true);
-	neuron.setExternalInput(-1.0); //negatif input given
+	neuron.setExternalInput(-1.0); //negative input given
 	neuron.update(1, 0.0, 5);//one update without noises
-	//check if the membrane potential decreases in negatif according to the membrane equation
+	//check if the membrane potential decreases in negative according to the membrane equation
 	EXPECT_NEAR(-20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001); 
 }
 
 /*
  * TEST3: Test if the membrane potential of the neuron is coeherent with the membrane equation.
- * The used external input null, thus the membrane pontential shouldn't increase if no noises 
- * are added.
+ * The used external input null, thus the membrane pontential shouldn't increase if no noise is added.
 */
 
 TEST (NeuronTest, NulMembranePotential){
 	Neuron neuron (true);
-	neuron.setExternalInput (0.0); //no input is received by the neuron
-	neuron.update(1, 0.0, 5); //no noise received
+	neuron.setExternalInput (0.0); //no input 
+	neuron.update(1, 0.0, 5); //no noise 
 	EXPECT_NEAR(0.0, neuron.getV_membrane(), 0.001); //check if there is no changes in the membrane potential
 }
 
-
 /*
  * TEST4: Test if the time of the first spike is 92.4 milliseconds for an external input of 1.01
- * as we expect
 */
 
 TEST (NeuronTest, SpikeTimes){
 	Neuron neuron (true); 
-	neuron.setExternalInput(1.01); //the external input is setted to 1.01 so that the neuron will cross the threshold
-	//neuron is update until one step before it spikes
+	neuron.setExternalInput(1.01); // the neuron will cross the threshold with this input
+	//update the neuron until it's ready to spike
 	do {
-		neuron.update(1, 0.0, 5);
+		neuron.update(1, 0.0, 5); //no noise
 	} while (neuron.getNeuronClock() < 924);
 	EXPECT_NEAR (neuron.getV_membrane(), 20.0, 0.001); //check if neuron is ready to spike
 	neuron.update(1, 0.0, 5); //neuron spikes
@@ -73,17 +72,17 @@ TEST (NeuronTest, SpikeTimes){
  * TEST5: Test if the post-synaptic neuron receives the spike with the correct delay
 */
 TEST (NeuronTest, Delay){
-	Neuron neuron1(true); //the spiking neuron is an excitatory neuron: the amplitude of its signal is 0.1
+	Neuron neuron1(true); //the spiking neuron is an excitatory neuron
 	Neuron neuron2(true);
 	neuron1.addTargetNeuron(&neuron2); //neuron2 is added as a target of neuron1
 	neuron1.setExternalInput(1.01); //neuron1 is the only one receiving an external input
 	
-	//the neurons are updated unitl one step before neuron1 spikes
+	//the neurons are updated unitl neuron1 is ready to spike
 	do {
-		neuron1.update(1, 0.0, 5); 
+		neuron1.update(1, 0.0, 5); //no noise
 		neuron2.update(1, 0.0, 5); 	
 	} while (neuron1.getNeuronClock() < 924);
-	EXPECT_NEAR (neuron1.getV_membrane(), 20.0, 0.001); //chekc if neuron1 is ready to spike
+	EXPECT_NEAR (neuron1.getV_membrane(), 20.0, 0.001); //chek if neuron1 is ready to spike
 	EXPECT_NEAR (neuron2.getV_membrane(), 0.0, 0.001); //check if neuron2 doesn't receive any stimuli
 	neuron1.update(1, 0.0, 5); //neuron1 spikes
 	neuron2.update(1, 0.0, 5);
@@ -97,11 +96,10 @@ TEST (NeuronTest, Delay){
 }
 
 /*
- * TEST5: Test if every neuron receives exactly 1000 excitatory connections and 250 inhibitory connections 
+ * TEST6: Test if every neuron receives exactly 1000 excitatory connections and 250 inhibitory connections 
 */
 TEST (NeuronTest, Connections){
 	std::array <Neuron*, 12500> neurons; //network
-	//add the connections between every neuron
 	Neuron n_excitatory(true);
 	Neuron n_inhibitory (false);
 	 //initiliaze the array representing the network of 12500 neurons
@@ -113,6 +111,7 @@ TEST (NeuronTest, Connections){
 		}
 		assert(neurons[i] != nullptr); //check that no neurons in the end is nullptr
 	}
+	//add the connections between every neuron
 	for (auto const& n: neurons){
 		n->addConnections(neurons);
 		EXPECT_EQ (n->getExcitatoryConnections(), 1000);//check the number of excitatory connections
@@ -120,7 +119,7 @@ TEST (NeuronTest, Connections){
 	}
 	int j(0);
 	//this is another way to test the number of connections: instead of counting the connections added
-	//to each neuron, the sizes of the vector of targets are summed up and has to give the total
+	//to each neuron, the sizes of the vector of targets are summed up and have to give the total
 	//number of connections present in the whole network
 	for (auto const& n: neurons){
 		j += n->getTargets().size();
@@ -134,8 +133,8 @@ TEST (NeuronTest, Connections){
 }
 
 /*
- * TEST6: Test if the neuron respects its refractory period even 
- * if an external input and noises are applied during the refractory period (after the spike)s
+ * TEST7: Test if the neuron respects its refractory period even 
+ * if an external input and noises are applied during the refractory period (after the spike)
 */
 
 TEST (NeuronTest, RefractoryPeriod){
@@ -144,15 +143,16 @@ TEST (NeuronTest, RefractoryPeriod){
 	do { //update the neuron until it spikes
 		neuron.update(1, 0.0, 5);
 	} while (neuron.getNeuronClock() < 925);
+	double noise = neuron.randomSpikes(2);
 	for (int i(0); i<tau_rp; ++i){ //for 2.0 milliseconds the neuron has to stay in its refractory period
 		EXPECT_NEAR (0.0, neuron.getV_membrane(), 0.001); //check if the membrane potential is 0.0 
-		neuron.update(1, 0.0, 5);
+		neuron.update(1,noise, 5);
 	}
 	//check if after the refractory period the membrane potential starts increasing again
-	EXPECT_NEAR(20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
+	EXPECT_NEAR(noise + 20.0*(1.0-exp(-0.1/20.0)), neuron.getV_membrane(), 0.001);  
 }
 /*
- * TEST7: Test that the amplitude received by an inhibitory neuron gives a negative membrane potential
+ * TEST8: Test that the amplitude received by an inhibitory neuron gives a negative membrane potential
  * after the correct delay.
 */
 TEST (NeuronTest, Inhibitory){
@@ -165,13 +165,13 @@ TEST (NeuronTest, Inhibitory){
 		n1.update(1, 0.0, 5);
 		n2.update(1, 0.0, 5);
 	} while (n1.getNeuronClock() < 924);
-	n1.update(1, 0.0, 5); //n1 spikes
+	n1.update(1, 0.0, 5); //n1 spikes, the amplitude is -0.5 (g=5)
 	n2.update(1, 0.0, 5);
 	//after the correct delay n2 receives the signal
 	for (int i(0); i<D; ++i){ 
 		n2.update(1, 0.0, 5);
 	}
-	//check if the membrane potential of an amplitude of -5 (g=5) is negative when the spikes is received
+	//check if the membrane potential is negative when the spikes is received
 	EXPECT_NEAR (-0.5, n2.getV_membrane(), 0.001);
 }
 
