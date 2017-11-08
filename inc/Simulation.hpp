@@ -5,6 +5,19 @@
 
 /*!
      * @class Simulation
+     * @details This class simulates the Brunel's network.
+     * First, it simulates the network when it contains one neuron only.
+     * On the terminal appears the time of the spikes occured and one
+     * document will store the membrane potential at every time step interval.
+     * Then it simulates the model with two neurons connected and a delay of reception.
+     * On the terminal appears the time of the spikes and the time when the spikes has been received.
+     * Finally, it simulates the whole network with 12500 neurons. Here the connections are 
+     * created and all the neurons updated. A document will store all the 
+     * time of the spikes occured and the corresponding id of the spiking neuron. This
+     * documentaiton will be used for generating the graphs with Python.
+     * After the whole network simulation, 4 graphs with two different ratios can
+     * be generated. 
+     * Some additional functions allow a better modularisation.
      */
      
 class Simulation
