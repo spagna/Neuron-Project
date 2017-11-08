@@ -219,8 +219,9 @@ void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 	std::random_device rd; 
 	std::mt19937 gen(rd()); 
 	
-	//distribution of random integer numbers to determine which excitatory neuron 
-	//is connected to the current neuron. 
+	//distribution of random integer numbers to determine which excitatory
+	//or inhibitory neuron is connected to the current neuron. 
+	
 	//Those values correpond to an index of an excitatory neuron in the array of neurons
 	std::uniform_int_distribution<> dis_e (0, excitatory_neurons-1); 
 	
@@ -231,8 +232,6 @@ void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)
 		++nb_excitatory_connections_; 
 	}
 	
-	//distribution of random integer numbers to determine which inhibitory neuron 
-	//is connected to the current neuron. 
 	//Those values correpond to an index of an inhibitory neuron in the array of neurons
 	std::uniform_int_distribution<> dis_i (0, inhibitory_neurons-1);
 
