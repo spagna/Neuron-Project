@@ -80,7 +80,8 @@ void Simulation::networkSimulation(double g, double pois)
 	do {
 		for (size_t i(0); i<neurons.size(); ++i){ 
 			assert (neurons[i] != nullptr); //check always that the neurons aren't nullptr
-			neurons[i]->update(N, neurons[i]->randomSpikes(pois), g);  //update with the noises given by random spikes
+			//update with the noises given by random spikes
+			neurons[i]->update(N, neurons[i]->randomSpikes(pois), g);  
 			if (neurons[i]->getSpikeState()){ 
 				//when a neuron spikes, write down the time and the index of the neuron
 				file2 << neurons[i]->getTimeSpike()/h << '\t' << i << '\n';
@@ -92,7 +93,8 @@ void Simulation::networkSimulation(double g, double pois)
 		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
 	}
 	
-	for (auto& n : neurons){ //at the end of the simulation the memory has to be desallocated
+	//at the end of the simulation the memory has to be desallocated
+	for (auto& n : neurons){ 
 		n = nullptr;
 		delete n;
 	}
@@ -148,7 +150,7 @@ void Simulation::initializeNeurons(std::array <Neuron*, total_neurons>& ns)
 void Simulation::pythonScript()
 {
 	std::string name ("python ../Graphs.py &");
-	system (name.c_str());
+	system (name.c_str()); //name stays constant
 }
 	
 
