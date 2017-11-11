@@ -207,10 +207,10 @@ void Neuron::update(int dt, double noise, double g)
 	neuron_clock_ += dt;	
 }
 
-void Neuron::solveMembraneEquation(double input, double ampl, double random)
+void Neuron::solveMembraneEquation(double input, double ampl, double noise)
 {
 	//equation of the membrane potential
-	V_membrane_ = const1*V_membrane_ + const2*input + ampl + random;
+	V_membrane_ = const1*V_membrane_ + const2*input + ampl + noise;
 }
 
 void Neuron::addConnections(std::array<Neuron*, total_neurons>  const& neurons)

@@ -1,8 +1,6 @@
 #include "Simulation.hpp"
-#include "Neuron.hpp"
 #include <iostream>
 #include <fstream>
-#include <array>
 #include <vector>
 #include <string>
 
@@ -11,14 +9,15 @@ Simulation::Simulation()
 {}
 void Simulation::oneNeuronSimulation()
 {
-	Neuron n(true); //an excitatory neuron declared
-	std::ofstream file; //open a file to write down the values of the membrane potential at each time step
+	Neuron n(true); 
+	
+	//open a file to write down the values of the membrane potential at each time step
+	std::ofstream file; 
 	file.open("Datas.txt");
 	assert(not file.fail()); //check if the file opens correctly
-	double input(0.0); //the user decide the external input
-	std::cout << "Chose a value for the external input" << std::endl;
-	std::cin>>input;
-	n.setExternalInput(input);
+	
+	n.setExternalInput(externalInput());
+	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do { //update all the neurons of the simulation
 		n.update(1, 0.0, 5); //no noise is added at the update function for one neuron simulation
@@ -35,10 +34,8 @@ void Simulation::twoNeruonsSimulation()
 	Neuron neuron1(true), neuron2(true); //neuron 1 is the spiking neuron, neuron2 is a post-synaptic neuron
 	neuron1.addTargetNeuron(&neuron2);
 	
-	double input(0.0); //the user decide the external input
-	std::cout << "Chose a value for the external input" << std::endl;
-	std::cin>>input;
-	neuron1.setExternalInput(input); //the external input is added only to the spiking neuron
+	 //the external input is added only to the spiking neuron
+	neuron1.setExternalInput(externalInput());
 	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do { //update all the neurons of the simulation
@@ -62,23 +59,14 @@ void Simulation::networkSimulation(double g, double pois)
 	file2.open("Spike_time.txt");
 	assert (not file2.fail());  //check if the file opens correctly
 
-	Neuron n_excitatory(true);
-	Neuron n_inhibitory (false);
-	 //initiliaze the array representing the network of 12500 neurons
+	
+	//initiliaze the array representing the network of 12500 neurons
 	std::array <Neuron*, total_neurons> neurons;
-	for (size_t i(0); i<neurons.size(); ++i){
-		if (i<excitatory_neurons){//from 0 to 9999 the neurons are excitatory
-			neurons[i] = new Neuron(n_excitatory);
-		} else {
-			neurons[i] = new Neuron (n_inhibitory);//from 9999 to 12499 the neurons are inhibitory
-		}
-		assert(neurons[i] != nullptr); //check that no neurons in the end is nullptr
-	}
+	initializeNeurons(neurons);
 	//add the connections between each neuron
 	for (auto const& n : neurons){
 		n->addConnections(neurons);	
 	}
-	
 	int simulation_time = t_start; //the global simulation starts at step t_start
 	do {
 		for (size_t i(0); i<neurons.size(); ++i){ //update all the neurons present in the network
@@ -129,6 +117,30 @@ void Simulation::plotGraph_D()
 	/*std::string name ("python ../Graphs.py &");
 	system (name.c_str());*/	
 }
+
+double Simulation::externalInput()
+{
+	double input(0.0); 
+	std::cout << "Chose a value for the external input" << std::endl;
+	std::cin>>input;
+	return input;
+}
+
+void Simulation::initializeNeurons(std::array <Neuron*, total_neurons>& ns)
+{
+	Neuron n_excitatory(true);
+	Neuron n_inhibitory (false);
+	for (size_t i(0); i<ns.size(); ++i){
+		if (i<excitatory_neurons){//from 0 to 9999 the neurons are excitatory
+			ns[i] = new Neuron(n_excitatory);
+		} else {
+			ns[i] = new Neuron (n_inhibitory);//from 9999 to 12499 the neurons are inhibitory
+		}
+		assert(ns[i] != nullptr); //check that no neurons in the end is nullptr
+	}
+	
+}
+	
 	
 
 Simulation::~Simulation()

@@ -2,6 +2,8 @@
 #define SIMULATION_H
 
 #include <iostream>
+#include <array>
+#include "Neuron.hpp"
 
 /*!
      * @class Simulation
@@ -100,6 +102,17 @@ public:
      * central value of the poisson curbe.
      */
 	void plotGraph_D();
+	
+	/*!
+     * @brief Let the user set the external input for the simulation
+     *  
+     * @return a double input : the value of the external input
+     */
+     
+     double externalInput();
+     
+     void initializeNeurons(std::array <Neuron*, total_neurons>& ns);
+     
 	/*!
      * @brief Destructor of the class Simulation 
      */
