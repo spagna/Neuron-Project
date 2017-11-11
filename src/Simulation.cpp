@@ -74,6 +74,7 @@ void Simulation::networkSimulation(double g, double pois)
 	for (auto const& n : neurons){
 		n->addConnections(neurons);	
 	}
+	std::cout << "Connections added" << std::endl;
 	
 	int simulation_time = t_start; 
 	//update all the neurons present in the network
@@ -89,9 +90,7 @@ void Simulation::networkSimulation(double g, double pois)
 		}
 		simulation_time += N; //the simulation time advanced of a time step N after all neuron clocks have already advanced
 	} while (simulation_time < t_stop); 
-	for (size_t i(0); i<neurons.size(); ++i){ 
-		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
-	}
+	
 	
 	//at the end of the simulation the memory has to be desallocated
 	for (auto& n : neurons){ 
@@ -144,7 +143,7 @@ void Simulation::initializeNeurons(std::array <Neuron*, total_neurons>& ns)
 		}
 		assert(ns[i] != nullptr); //check that no neurons in the end is nullptr
 	}
-	
+	std::cout << "Network initialized" << std::endl;
 }
 
 void Simulation::pythonScript()
