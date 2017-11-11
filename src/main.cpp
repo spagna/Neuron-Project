@@ -7,7 +7,8 @@
 int main()
 {
 	Simulation sim;
-	sim.networkSimulation(5, 2);
+	sim.plotGraph_D();
+	//sim.networkSimulation(5, 2);
 	//sim.oneNeuronSimulation();
 	//sim.twoNeruonsSimulation();
 	std::cout << "Simulation done" << std::endl;

@@ -22,7 +22,7 @@
  *************************************************************************************************/
 
 constexpr int t_start (0);//!< step the simulation starts (0.0 milliseconds)
-constexpr int t_stop (5000); //!< step the simulation stops (500.0 milliseconds)
+constexpr int t_stop (12000); //!< step the simulation stops (500.0 milliseconds)
 
 
 constexpr int tau (200); //!< time constant in terms of time steps (20.0 in milliseconds) (note tau = R/C)

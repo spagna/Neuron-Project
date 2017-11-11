@@ -107,7 +107,6 @@ public:
      *  
      * @return a double input : the value of the external input
      */
-     
      double externalInput();
      /*!
      * @brief Initialize the table of fixed size of pointers on neurons (12500)
@@ -117,7 +116,12 @@ public:
      * passed by reference because it has to be modified.
      */
      void initializeNeurons(std::array <Neuron*, total_neurons>& ns);
-     
+     /*!
+     * @brief Open the python script
+     * @details The name of the python script in "system" remains constant
+     * 
+     */
+     void pythonScript();
 	/*!
      * @brief Destructor of the class Simulation 
      */

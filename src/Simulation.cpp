@@ -91,9 +91,7 @@ void Simulation::networkSimulation(double g, double pois)
 	for (size_t i(0); i<neurons.size(); ++i){ 
 		std::cout << neurons[i]->getNumberSpikes() << std::endl; 
 	}
-	//open the python script
-	/*std::string name ("python ../Graphs.py &");
-	system (name.c_str());*/
+	
 	for (auto& n : neurons){ //at the end of the simulation the memory has to be desallocated
 		n = nullptr;
 		delete n;
@@ -103,29 +101,25 @@ void Simulation::networkSimulation(double g, double pois)
 void Simulation::plotGraph_A()
 {
 	networkSimulation(3,2);
-	/*std::string name ("python ../Graphs.py &");
-	system (name.c_str());*/
+	pythonScript();
 }
 
 void Simulation::plotGraph_B()
 {
 	networkSimulation(6,4);
-	/*std::string name ("python ../Graphs.py &");
-	system (name.c_str());*/
+	pythonScript();
 }
 
 void Simulation::plotGraph_C()
 {
 	networkSimulation(5,2);
-	/*std::string name ("python ../Graphs.py &");
-	system (name.c_str());*/
+	pythonScript();
 }
 
 void Simulation::plotGraph_D()
 {
 	networkSimulation(4.5, 0.9);
-	/*std::string name ("python ../Graphs.py &");
-	system (name.c_str());*/	
+	pythonScript();
 }
 
 double Simulation::externalInput()
@@ -150,7 +144,12 @@ void Simulation::initializeNeurons(std::array <Neuron*, total_neurons>& ns)
 	}
 	
 }
-	
+
+void Simulation::pythonScript()
+{
+	std::string name ("python ../Graphs.py &");
+	system (name.c_str());
+}
 	
 
 Simulation::~Simulation()
