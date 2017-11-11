@@ -6,7 +6,7 @@
 Neuron::Neuron (bool excitatory_neuron, 
 				double V_membrane, unsigned int nb_spikes,
 				double t_spike, 
-				bool spike, int neuron_clock, 
+				bool spike, unsigned int neuron_clock, 
 				double external_input,
 				bool r_period)
 				
@@ -44,7 +44,7 @@ bool Neuron::getSpikeState() const
 	return spike_;
 }
 
-int Neuron::getNeuronClock() const
+unsigned int Neuron::getNeuronClock() const
 {
 	return neuron_clock_;
 }
@@ -110,7 +110,7 @@ void Neuron::setSpikeState (bool spike)
 	spike_ = spike;
 }
 
-void Neuron::setNeuronClock (int clock)
+void Neuron::setNeuronClock (unsigned int clock)
 {
 	neuron_clock_ = clock;
 }
@@ -176,6 +176,7 @@ void Neuron::updateTargets(double g)
 		assert(n != nullptr); //controls that the targets aren't nullptr
 		// the time buffer is filled with amplitudes of excitatory or inhibitory neurons
 		// the modulo allows a correct insertion of the values in a table of fixed  size
+		assert ((neuron_clock_+D)%(D+1) < t_buffer_.size()); //check the insertion doesn't exceed the vector size
 		if (excitatory_neuron_){
 			n->addTimeBuffer((neuron_clock_+D)%(D+1), J_e);
 		} else {

@@ -103,7 +103,7 @@ public:
 	Neuron (bool excitatory_neuron,
 			double membranePotential = 0.0, unsigned int nb_spikes = 0, 
 			double t_spike = 0.0, bool spike = false,	
-			int neuron_clock = 0, double external_input = 0.0,
+			unsigned int neuron_clock = 0, double external_input = 0.0,
 			bool r_period = false);
 	
 	
@@ -135,9 +135,9 @@ public:
 	/*!
      * @brief Get the local time of the neuron, which is different form the time of the simulation
      *		  
-     * @return An integer neuron_clock_: the neuron local clock in term of time step
+     * @return A positive integer neuron_clock_: the neuron local clock in term of time step
      */
-	int getNeuronClock() const;
+	unsigned int getNeuronClock() const;
 	/*!
      * @brief Get the external input received by one or two neurons. 
      * @details When the simulation has more than two neurons, the external input is always 0.0 
@@ -231,7 +231,7 @@ public:
 	 * 
 	 * @param clock : an integer refering to a certain time step 
 	 */
-	void setNeuronClock (int clock);
+	void setNeuronClock (unsigned int clock);
 	/*!
 	 * @brief Set the external current received 
 	 *
@@ -399,7 +399,7 @@ private:
 	
 	bool spike_; //!< True if a spike has occured during the last update  
 	
-	int neuron_clock_; //!< Local time of the neuron calculated in time step intervals
+	unsigned int neuron_clock_; //!< Local time of the neuron calculated in time step intervals
 	
 	double external_input_; //!< External input received in millivolts  
 	
