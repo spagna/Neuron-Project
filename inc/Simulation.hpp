@@ -102,7 +102,6 @@ public:
      * central value of the poisson curbe.
      */
 	void plotGraph_D();
-	
 	/*!
      * @brief Let the user set the external input for the simulation
      *  
@@ -110,7 +109,13 @@ public:
      */
      
      double externalInput();
-     
+     /*!
+     * @brief Initialize the table of fixed size of pointers on neurons (12500)
+     * @details There are 10000 excitatory neruons and 12500 inhibitory neurons
+     *  
+     * @param ns : array of pointer on neurons that has to be inizialize. The parameter is 
+     * passed by reference because it has to be modified.
+     */
      void initializeNeurons(std::array <Neuron*, total_neurons>& ns);
      
 	/*!
