@@ -6,6 +6,7 @@
 
 int main()
 {
+	//uncomment the simulate one specific case
 	Simulation sim;
 	//sim.oneNeuronSimulation();
 	//sim.twoNeruonsSimulation();
